@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Броня Крепка — Вход в подразделение</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-grid">
+
+  <!-- Левая колонка — преимущества -->
+  <div class="auth-hero">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:0.2rem">
+      <div style="font-size:2.5rem;color:#a67c28;filter:drop-shadow(0 0 6px rgba(166,124,40,0.3))">⬡</div>
+      <h1 style="margin:0">БРОНЯ КРЕПКА</h1>
+    </div>
+    <div class="auth-tagline">ТАНКОВЫЙ ФОРУМ 30+</div>
+
+    <div class="usp-list">
+      <div class="usp-item">
+        <div class="usp-icon">⬡</div>
+        <div>
+          <div class="usp-title">Система званий</div>
+          <div class="usp-desc">От рядового до генерала — карьерный рост внутри сообщества</div>
+        </div>
+      </div>
+      <div class="usp-item">
+        <div class="usp-icon">🏆</div>
+        <div>
+          <div class="usp-title">Зал Боевой Славы</div>
+          <div class="usp-desc">Еженедельное признание + кнопка «Респект» под каждым постом</div>
+        </div>
+      </div>
+      <div class="usp-item">
+        <div class="usp-icon">🎯</div>
+        <div>
+          <div class="usp-title">Тактический полигон</div>
+          <div class="usp-desc">Разбор реплеев, гайды, схемы боёв от опытных танкистов</div>
+        </div>
+      </div>
+      <div class="usp-item">
+        <div class="usp-icon">💥</div>
+        <div>
+          <div class="usp-title">Склад нытья</div>
+          <div class="usp-desc">Закрытый раздел поддержки. Пожаловаться на жизнь — без троллинга</div>
+        </div>
+      </div>
+      <div class="usp-item">
+        <div class="usp-icon">🌙</div>
+        <div>
+          <div class="usp-title">Броня на ночь</div>
+          <div class="usp-desc">Тёмная тема + фильтр синего света для ночных боёв</div>
+        </div>
+      </div>
+      <div class="usp-item">
+        <div class="usp-icon">⚡</div>
+        <div>
+          <div class="usp-title">Система «Свой-Чужой»</div>
+          <div class="usp-desc">Друзья, штрафбат, голосовые каналы через Discord</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Правая колонка — форма входа / регистрации -->
+  <div class="auth-card">
+    <!-- Табы -->
+    <div style="display:flex;border-bottom:2px solid var(--border-color);margin-bottom:1.25rem">
+      <button class="auth-tab active" id="tabLogin" style="flex:1;padding:0.5rem 1rem;font-size:0.95rem;font-weight:600;background:none;border:none;border-bottom:2px solid var(--fire-500);margin-bottom:-2px;color:var(--text-primary);cursor:pointer;font-family:inherit;transition:0.2s">Вход</button>
+      <button class="auth-tab" id="tabRegister" style="flex:1;padding:0.5rem 1rem;font-size:0.95rem;font-weight:500;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;color:var(--text-tertiary);cursor:pointer;font-family:inherit;transition:0.2s">Регистрация</button>
+    </div>
+
+    <!-- Форма входа -->
+    <div id="formLogin">
+      <h2 style="font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:0.3rem">Вход в подразделение</h2>
+      <p class="auth-sub">Введи свои позывные, боец</p>
+
+      <form onsubmit="window.location.href='feed.html';return false">
+        <div class="form-group">
+          <label for="loginEmail">Позывной (никнейм) или email</label>
+          <input class="input" type="text" id="loginEmail" placeholder="Полковник_Медведь" autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Пароль</label>
+          <input class="input" type="password" id="loginPassword" placeholder="•••••••••••" autocomplete="current-password">
+        </div>
+
+        <div class="form-group">
+          <label class="form-checkbox">
+            <input type="checkbox" checked>
+            Запомнить на 7 дней
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="justify-content:center;padding:0.7rem;font-size:1rem">
+          ⬡ Заступить на пост
+        </button>
+      </form>
+
+      <div class="auth-links">
+        <p style="margin-top:1rem;font-size:0.85rem"><a href="#" id="showRecovery">Забыл пароль?</a></p>
+      </div>
+    </div>
+
+    <!-- Форма восстановления пароля -->
+    <div id="formRecovery" style="display:none">
+      <h2 style="font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:0.3rem">Восстановление пароля</h2>
+      <p class="auth-sub">Введи email, пришлём ссылку на сброс</p>
+
+      <form onsubmit="recoveryDone();return false">
+        <div class="form-group">
+          <label for="recoveryEmail">Email</label>
+          <input class="input" type="email" id="recoveryEmail" placeholder="tankist@mail.ru" autocomplete="email">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="justify-content:center;padding:0.7rem;font-size:1rem" id="recoveryBtn">
+          📨 Отправить ссылку
+        </button>
+      </form>
+
+      <div class="auth-links">
+        <p style="margin-top:1rem;font-size:0.85rem"><a href="#" id="backToLoginFromRecovery">← Назад ко входу</a></p>
+      </div>
+    </div>
+
+    <!-- Успех восстановления -->
+    <div id="formRecoveryDone" style="display:none;text-align:center;padding:1.5rem 0">
+      <div style="font-size:3rem;margin-bottom:0.75rem">📨</div>
+      <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:0.3rem">Письмо отправлено!</h2>
+      <p class="auth-sub">Проверь почту — там ссылка для сброса пароля</p>
+      <button class="btn btn-ghost" style="margin-top:1rem" onclick="showLogin()">← Понял, вернуться ко входу</button>
+    </div>
+
+    <!-- Форма регистрации -->
+    <div id="formRegister" style="display:none">
+      <h2 style="font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:0.3rem">Вступление в ряды</h2>
+      <p class="auth-sub">Создай танковый паспорт за 30 секунд</p>
+
+      <form onsubmit="window.location.href='feed.html';return false">
+        <div class="form-group">
+          <label for="regNick">Позывной (никнейм)</label>
+          <input class="input" type="text" id="regNick" placeholder="Полковник_Медведь" autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="regEmail">Email</label>
+          <input class="input" type="email" id="regEmail" placeholder="tankist@mail.ru" autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="regPassword">Пароль</label>
+          <input class="input" type="password" id="regPassword" placeholder="•••••••••••" autocomplete="new-password">
+        </div>
+
+        <div class="form-group">
+          <label for="regPasswordConfirm">Подтверждение пароля</label>
+          <input class="input" type="password" id="regPasswordConfirm" placeholder="•••••••••••" autocomplete="new-password">
+        </div>
+
+        <div class="form-group">
+          <label for="regProfession">Реальный полк / профессия <span class="text-xs text-tertiary">(необязательно)</span></label>
+          <input class="input" type="text" id="regProfession" placeholder="Менеджер по продажам">
+        </div>
+
+        <div class="form-group">
+          <label class="form-checkbox">
+            <input type="checkbox" checked>
+            Согласен с <a href="#" onclick="return false">правилами подразделения</a>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-fire w-full" style="justify-content:center;padding:0.7rem;font-size:1rem">
+          ⬡ Вступить в ряды
+        </button>
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="js/utils.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/avatar.js"></script>
+<script>
+  // Переключение Вход / Регистрация
+  const tabLogin = document.getElementById('tabLogin');
+  const tabRegister = document.getElementById('tabRegister');
+  const formLogin = document.getElementById('formLogin');
+  const formRegister = document.getElementById('formRegister');
+  const switchToLogin = document.getElementById('switchToLogin');
+
+  const formRecovery = document.getElementById('formRecovery');
+  const formRecoveryDone = document.getElementById('formRecoveryDone');
+  const tabsContainer = document.querySelector('.auth-card > div:first-child');
+  const showRecovery = document.getElementById('showRecovery');
+  const backToLoginFromRecovery = document.getElementById('backToLoginFromRecovery');
+
+  function hideAllForms() {
+    formLogin.style.display = 'none';
+    formRegister.style.display = 'none';
+    formRecovery.style.display = 'none';
+    formRecoveryDone.style.display = 'none';
+  }
+
+  function showLogin() {
+    hideAllForms();
+    formLogin.style.display = '';
+    if (tabsContainer) tabsContainer.style.display = 'flex';
+    tabLogin.className = 'auth-tab active';
+    tabRegister.className = 'auth-tab';
+    tabLogin.style.borderBottomColor = 'var(--fire-500)';
+    tabLogin.style.color = 'var(--text-primary)';
+    tabLogin.style.fontWeight = '600';
+    tabRegister.style.borderBottomColor = 'transparent';
+    tabRegister.style.color = 'var(--text-tertiary)';
+    tabRegister.style.fontWeight = '500';
+  }
+
+  function showRegister() {
+    hideAllForms();
+    formRegister.style.display = '';
+    if (tabsContainer) tabsContainer.style.display = 'flex';
+    tabRegister.className = 'auth-tab active';
+    tabLogin.className = 'auth-tab';
+    tabRegister.style.borderBottomColor = 'var(--fire-500)';
+    tabRegister.style.color = 'var(--text-primary)';
+    tabRegister.style.fontWeight = '600';
+    tabLogin.style.borderBottomColor = 'transparent';
+    tabLogin.style.color = 'var(--text-tertiary)';
+    tabLogin.style.fontWeight = '500';
+  }
+
+  function showRecoveryForm() {
+    hideAllForms();
+    formRecovery.style.display = '';
+    document.getElementById('recoveryEmail').value = '';
+    if (tabsContainer) tabsContainer.style.display = 'none';
+  }
+
+  function recoveryDone() {
+    var email = document.getElementById('recoveryEmail').value.trim();
+    if (!email) { toast.warning('Введи email'); return false; }
+    hideAllForms();
+    formRecoveryDone.style.display = '';
+    if (tabsContainer) tabsContainer.style.display = 'none';
+    return false;
+  }
+
+  tabLogin.addEventListener('click', showLogin);
+  tabRegister.addEventListener('click', showRegister);
+  if (switchToLogin) switchToLogin.addEventListener('click', function(e) { e.preventDefault(); showLogin(); });
+  if (showRecovery) showRecovery.addEventListener('click', function(e) { e.preventDefault(); showRecoveryForm(); });
+  if (backToLoginFromRecovery) backToLoginFromRecovery.addEventListener('click', function(e) { e.preventDefault(); showLogin(); });
+</script>
+</body>
+</html>

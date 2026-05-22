@@ -1,0 +1,527 @@
+/* ================================================================
+   ЛЕЙАУТ — сетка, сайдбар, карточки, посты, чат
+   ================================================================ */
+
+/* ----- Контейнер ----- */
+.page-layout {
+  display: flex;
+  gap: 1.5rem;
+  max-width: 1280px;
+  margin: 1.5rem auto;
+  padding: 0 1.5rem;
+}
+.main-content { flex: 1; min-width: 0; }
+.sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ----- Хлебные крошки ----- */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.breadcrumbs a { color: var(--text-tertiary); }
+.breadcrumbs a:hover { color: var(--text-primary); }
+
+/* ----- Табы ----- */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: 1rem;
+  overflow-x: auto;
+}
+.tab {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.tab:hover { color: var(--text-primary); }
+.tab.active { color: var(--text-primary); border-bottom-color: var(--fire-500); }
+
+/* ----- Категория ----- */
+.category-section { margin-bottom: 2rem; }
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.category-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.category-header .subtitle {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+/* ----- Карточка темы ----- */
+.topic-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: 0.2s;
+  margin-bottom: 8px;
+}
+.topic-card:hover {
+  border-color: var(--olive-500);
+  box-shadow: var(--shadow-sm);
+}
+.topic-card.pinned {
+  border-left: 3px solid var(--gold-500);
+  background: linear-gradient(135deg, var(--bg-card), rgba(196, 154, 58, 0.04));
+}
+.topic-card .topic-main { flex: 1; min-width: 0; }
+.topic-card .topic-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.topic-card .topic-title a { color: var(--text-primary); }
+.topic-card .topic-title a:hover { color: var(--text-link-hover); }
+
+.topic-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  margin-top: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.topic-stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  text-align: right;
+}
+
+/* ----- Пост ----- */
+.post {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  transition: 0.2s;
+}
+.post:hover { border-color: var(--olive-500); }
+
+.post-sidebar {
+  width: 140px;
+  flex-shrink: 0;
+  text-align: center;
+  padding-top: 0.25rem;
+}
+.post-sidebar .username {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+  display: block;
+  word-break: break-word;
+}
+.post-sidebar .post-count {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  margin-top: 0.15rem;
+}
+.post-body { flex: 1; min-width: 0; }
+
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+}
+.post-actions {
+  display: flex;
+  gap: 4px;
+}
+.post-actions .pa-btn {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  transition: 0.2s;
+}
+.post-actions .pa-btn:hover { background: var(--bg-card-alt); color: var(--text-primary); }
+
+.post-text {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+.post-text p { margin-bottom: 0.5rem; }
+.post-text p:last-child { margin-bottom: 0; }
+
+blockquote {
+  border-left: 3px solid var(--steel-300);
+  padding: 0.3rem 0.75rem;
+  margin-bottom: 0.5rem;
+  background: var(--bg-card-alt);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+}
+
+.post-attachments {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.post-attachment {
+  width: 120px;
+  height: 80px;
+  border-radius: var(--radius-sm);
+  background: var(--steel-200);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: 0.2s;
+}
+.post-attachment:hover { border-color: var(--olive-500); transform: scale(1.03); }
+.post-attachment img { width: 100%; height: 100%; object-fit: cover; }
+.post-attachment.replay {
+  background: var(--olive-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--olive-700);
+  width: 140px;
+  height: 60px;
+  border: 1px dashed var(--olive-500);
+}
+
+/* ----- Рейтинг поста ----- */
+.rating-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0.6rem;
+}
+.rating-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  color: var(--text-tertiary);
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.rating-btn:hover { border-color: var(--olive-500); color: var(--text-primary); }
+.rating-btn.up:hover,
+.rating-btn.up.active { border-color: var(--olive-600); color: var(--olive-600); }
+.rating-btn.down:hover,
+.rating-btn.down.active { border-color: var(--fire-500); color: var(--fire-500); }
+
+/* ----- Виджет сайдбара ----- */
+.sidebar-widget {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+.sidebar-widget-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+/* Онлайн-список */
+.online-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  padding: 0.25rem 0;
+}
+.online-item .name { flex: 1; font-weight: 500; }
+.status-dot-sm {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-dot-sm.online { background: var(--online-color); }
+.status-dot-sm.away { background: var(--warning-color); }
+
+/* Статистика */
+.sidebar-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.sidebar-stat {
+  text-align: center;
+  padding: 0.5rem;
+  background: var(--bg-card-alt);
+  border-radius: var(--radius-sm);
+}
+.sidebar-stat .num { font-size: 1.2rem; font-weight: 700; color: var(--olive-700); }
+.sidebar-stat .label { font-size: 0.68rem; color: var(--text-tertiary); text-transform: uppercase; }
+
+/* Зал Славы */
+.hof-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.82rem;
+}
+.hof-entry:last-child { border-bottom: none; }
+.hof-entry .hof-name { font-weight: 500; flex: 1; }
+.hof-entry .hof-reason { font-size: 0.7rem; color: var(--text-tertiary); }
+
+/* Достижения */
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.achievement-item:last-child { border-bottom: none; }
+.achievement-item .ach-icon {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+.achievement-item.locked .ach-icon { opacity: 0.35; filter: grayscale(1); }
+.achievement-item .ach-info { flex: 1; }
+.achievement-item .ach-name { font-weight: 600; font-size: 0.85rem; }
+.achievement-item .ach-desc { font-size: 0.72rem; color: var(--text-tertiary); }
+.achievement-item .ach-progress { font-size: 0.72rem; color: var(--gold-500); font-weight: 600; white-space: nowrap; }
+
+/* Клан-карточка */
+.clan-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.clan-card:last-child { border-bottom: none; }
+.clan-emblem {
+  width: 42px; height: 42px;
+  border-radius: var(--radius-md);
+  background: var(--steel-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.clan-info .clan-name { font-weight: 700; font-size: 0.85rem; }
+.clan-info .clan-desc { font-size: 0.75rem; color: var(--text-tertiary); }
+
+/* ----- Пагинация ----- */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+  font-family: inherit;
+}
+.page-btn:hover { border-color: var(--olive-500); background: var(--bg-card-alt); }
+.page-btn.active { background: var(--olive-700); color: var(--olive-100); border-color: var(--olive-700); }
+.page-btn.disabled { opacity: 0.4; cursor: default; }
+
+/* ----- Чат-виджет ----- */
+.chat-widget {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: 360px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 50;
+  transition: 0.3s;
+}
+.chat-widget.collapsed { height: 48px; }
+.chat-header {
+  background: var(--olive-800);
+  color: var(--olive-200);
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.chat-messages {
+  height: 260px;
+  overflow-y: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.chat-msg {
+  display: flex;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+.chat-msg .chat-author { font-weight: 600; flex-shrink: 0; min-width: 60px; }
+.chat-msg .chat-text { flex: 1; word-break: break-word; }
+.chat-msg .chat-time { font-size: 0.65rem; color: var(--text-tertiary); flex-shrink: 0; }
+.chat-input-area {
+  display: flex;
+  border-top: 1px solid var(--border-color);
+  padding: 0.4rem;
+  gap: 4px;
+}
+.chat-input-area input {
+  flex: 1;
+  border: none;
+  background: var(--bg-card-alt);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  outline: none;
+}
+.chat-stickers {
+  padding: 4px 8px;
+  font-size: 0.65rem;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border-light);
+}
+.chat-sticker {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: 0.15s;
+  filter: grayscale(0.2);
+  line-height: 1;
+}
+.chat-sticker:hover { transform: scale(1.15); filter: none; }
+
+/* ----- Форма ответа ----- */
+.reply-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+.reply-form textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  resize: vertical;
+  outline: none;
+  transition: 0.2s;
+}
+.reply-form textarea:focus {
+  border-color: var(--olive-500);
+  box-shadow: 0 0 0 3px rgba(90, 95, 68, 0.15);
+}
+
+/* ----- Вентильная секция ----- */
+.vent-section {
+  border: 1px dashed var(--fire-400);
+  background: linear-gradient(135deg, var(--bg-card), rgba(180, 60, 40, 0.03));
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem 1rem;
+}
+
+/* ----- Автосохранение ----- */
+.auto-save-indicator {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0.3rem;
+}

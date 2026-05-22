@@ -1,0 +1,379 @@
+/* ================================================================
+   КОМПОНЕНТЫ — хедер, футер, кнопки, карточки, бейджи
+   ================================================================ */
+
+/* ----- Хедер ----- */
+.header {
+  background: var(--olive-900);
+  border-bottom: 3px solid var(--olive-500);
+  padding: 0 1.5rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+[data-theme="night"] .header { background: #12130e; }
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold-400);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.header-logo .logo-icon { font-size: 1.5rem; line-height: 1; }
+.header-logo .logo-text small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.65rem;
+  opacity: 0.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.header-nav a {
+  color: var(--olive-400);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+.header-nav a:hover,
+.header-nav a.active {
+  color: var(--olive-200);
+  border-bottom-color: var(--fire-500);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ----- Поиск ----- */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.3rem 0.5rem;
+  transition: 0.2s;
+  position: relative;
+}
+.search-box:focus-within {
+  border-color: var(--olive-500);
+  box-shadow: 0 0 0 3px rgba(90, 95, 68, 0.15);
+}
+.search-box input {
+  border: none;
+  background: transparent;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  outline: none;
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+}
+.search-box input::placeholder { color: var(--text-tertiary); }
+[data-theme="night"] .search-box input::placeholder { color: var(--olive-700); }
+
+/* ----- Бургер-меню ----- */
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.burger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--olive-400);
+  border-radius: 1px;
+  transition: 0.3s;
+}
+
+/* ----- Кнопки ----- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1.2;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.btn-primary {
+  background: var(--olive-700);
+  color: var(--olive-100);
+}
+.btn-primary:hover { background: var(--olive-600); }
+
+.btn-fire {
+  background: var(--fire-600);
+  color: #fff;
+}
+.btn-fire:hover { background: var(--fire-500); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.btn-ghost:hover { background: var(--bg-card-alt); border-color: var(--olive-500); }
+
+.btn-sm { padding: 0.3rem 0.7rem; font-size: 0.78rem; }
+
+.btn-gold {
+  background: var(--gold-600);
+  color: #fff;
+}
+.btn-gold:hover { background: var(--gold-500); }
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid var(--olive-700);
+  color: var(--olive-400);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-icon:hover { background: var(--olive-800); color: var(--olive-200); }
+
+/* ----- Формы ----- */
+.form-group { margin-bottom: 1rem; }
+.form-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.3rem;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.form-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--olive-600);
+  cursor: pointer;
+}
+
+select.input {
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+
+/* ----- Инпуты ----- */
+.input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: var(--bg-input);
+  outline: none;
+  transition: 0.2s;
+  font-family: inherit;
+}
+.input:focus {
+  border-color: var(--olive-500);
+  box-shadow: 0 0 0 3px rgba(90, 95, 68, 0.15);
+}
+.input::placeholder { color: var(--text-tertiary); }
+
+/* ----- Аватар ----- */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--steel-300);
+  flex-shrink: 0;
+}
+.avatar-sm { width: 30px; height: 30px; border-radius: var(--radius-sm); }
+.avatar-lg { width: 80px; height: 80px; border-radius: var(--radius-lg); }
+.avatar-xl { width: 120px; height: 120px; border-radius: var(--radius-lg); }
+
+.avatar-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.online-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-card);
+  background: var(--online-color);
+}
+.online-dot.offline { background: var(--offline-color); }
+
+/* ----- Бейдж звания ----- */
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border-color);
+}
+.rank-private { color: var(--rank-private); border-color: var(--rank-private); }
+.rank-corporal { color: var(--rank-corporal); border-color: var(--rank-corporal); }
+.rank-sergeant { color: var(--rank-sergeant); border-color: var(--rank-sergeant); }
+.rank-lieutenant { color: var(--rank-lieutenant); border-color: var(--rank-lieutenant); }
+.rank-major { color: var(--rank-major); border-color: var(--rank-major); }
+.rank-colonel { color: var(--rank-colonel); border-color: var(--rank-colonel); }
+.rank-general { color: var(--rank-general); border-color: var(--rank-general); }
+
+/* ----- Медали ----- */
+.medal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.medal-gold { background: var(--gold-300); color: var(--gold-600); }
+.medal-silver { background: var(--steel-200); color: var(--steel-600); }
+.medal-fire { background: var(--fire-300); color: var(--fire-600); }
+
+.medal-strip { display: inline-flex; gap: 3px; }
+
+/* ----- Теги ----- */
+.tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: var(--olive-200);
+  color: var(--olive-700);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+[data-theme="night"] .tag { background: var(--olive-800); color: var(--olive-300); }
+.tag-fire { background: #fce8e4; color: var(--fire-600); }
+[data-theme="night"] .tag-fire { background: #3d1e18; color: var(--fire-400); }
+.tag-gold { background: #f5edce; color: var(--gold-600); }
+[data-theme="night"] .tag-gold { background: #3d2e11; color: var(--gold-400); }
+.tag-steel { background: var(--steel-100); color: var(--steel-600); }
+[data-theme="night"] .tag-steel { background: var(--steel-700); color: var(--steel-300); }
+
+/* ----- Футер ----- */
+.footer {
+  background: var(--olive-900);
+  padding: 1rem 1.5rem;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--olive-600);
+}
+[data-theme="night"] .footer { background: #12130e; }
+
+/* ----- Модальные окна ----- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: modalFadeIn 0.2s ease;
+}
+.modal-overlay.open { display: flex; }
+@keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem 2rem 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.25s ease;
+}
+@keyframes modalSlideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; }
+.modal-close {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-tertiary);
+  transition: 0.2s;
+}
+.modal-close:hover { color: var(--text-primary); }
+
+/* ----- Прогресс-бар ----- */
+.progress-bar {
+  height: 8px;
+  background: var(--border-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--gold-500);
+  transition: width 0.3s;
+}

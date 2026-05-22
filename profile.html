@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Броня Крепка — Танковый паспорт</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .passport-cover {
+      height: 110px;
+      background: linear-gradient(135deg, var(--olive-800), var(--olive-600));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      position: relative;
+    }
+    .passport-body {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.5rem 1.5rem 1.5rem;
+    }
+    .passport-left { text-align: center; }
+    .passport-left .avatar-wrap { margin-top: -60px; }
+    .passport-left .username { font-size: 1.2rem; font-weight: 700; margin: 0.5rem 0 0.2rem; }
+    .passport-left .quote { font-size: 0.78rem; font-style: italic; color: var(--text-tertiary); margin-top: 0.5rem; }
+    .passport-info { flex: 1; }
+    .passport-info .row {
+      display: flex;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.85rem;
+    }
+    .passport-info .row:last-child { border-bottom: none; }
+    .passport-info .row .plabel { width: 140px; flex-shrink: 0; color: var(--text-tertiary); font-weight: 500; }
+    .passport-info .row .pvalue { flex: 1; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+<div id="headerPlaceholder"></div>
+
+<div class="page-layout">
+  <main class="main-content">
+
+    <div class="breadcrumbs" style="margin-bottom:0.25rem">
+      <a href="feed.html">Форум</a> <span>/</span>
+      <span>Танковый паспорт</span>
+    </div>
+
+    <!-- Паспорт -->
+    <div class="sidebar-widget" style="padding:0;overflow:hidden">
+      <div class="passport-cover" style="display:flex;align-items:center;gap:12px;padding:0 1.5rem">
+        <span style="font-size:2rem;color:var(--gold-600);filter:drop-shadow(0 0 6px rgba(166,124,40,0.3));line-height:1">⬡</span>
+        <span style="font-size:0.82rem;font-weight:600;color:var(--gold-400);letter-spacing:2px;margin-top:2px">ТАНКОВЫЙ ПАСПОРТ</span>
+        <span style="margin-left:auto;font-size:0.7rem;color:var(--olive-500)">№ ТФ-2026-0047</span>
+      </div>
+
+      <div class="passport-body" style="flex-wrap:wrap">
+        <div class="passport-left">
+          <div class="avatar-wrap" style="margin:0 auto">
+            <img class="avatar avatar-xl" data-avatar="me" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23a67c28' width='100' height='100'/%3E%3Ccircle fill='%23e8cc6e' cx='50' cy='35' r='22'/%3E%3Ctext x='50' y='42' text-anchor='middle' font-size='12' fill='%234d3710' font-weight='bold'%3EPolk%3C/text%3E%3C/svg%3E" alt="Avatar">
+            <span class="online-dot" style="width:16px;height:16px;border-width:3px"></span>
+          </div>
+          <div class="username">Полковник_Медведь</div>
+          <span class="rank-badge rank-colonel">★★★ Полковник</span>
+          <div class="medal-strip" style="justify-content:center;margin-top:0.3rem">
+            <span class="medal medal-gold">★</span>
+            <span class="medal medal-gold">★</span>
+            <span class="medal medal-silver">★</span>
+            <span class="medal medal-fire">♥</span>
+          </div>
+          <div class="quote" id="displayQuote">«Броня крепка и танки наши быстры!»</div>
+        </div>
+
+        <div class="passport-info">
+          <div class="row"><span class="plabel">Звание</span><span class="pvalue" style="color:var(--rank-colonel)">Полковник</span></div>
+          <div class="row"><span class="plabel">Реальный полк</span><span class="pvalue" id="displayProfession">Менеджер по продажам</span></div>
+          <div class="row"><span class="plabel">Возраст</span><span class="pvalue">37 лет</span></div>
+          <div class="row"><span class="plabel">Город</span><span class="pvalue" id="displayCity">Москва</span></div>
+          <div class="row"><span class="plabel">На форуме</span><span class="pvalue">2 года 7 месяцев</span></div>
+          <div class="row"><span class="plabel">Тем создано</span><span class="pvalue">47</span></div>
+          <div class="row"><span class="plabel">Постов</span><span class="pvalue">3 421</span></div>
+          <div class="row"><span class="plabel">Любимый танк</span><span class="pvalue" id="displayTank" style="color:var(--fire-500);font-weight:700">E 50 M</span></div>
+          <div class="row"><span class="plabel">Клан</span><span class="pvalue">🔵 Тяжеловесы</span></div>
+          <div class="row"><span class="plabel">Респектов</span><span class="pvalue" style="color:var(--gold-500);font-weight:700">247 👍</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-2" style="margin-top:1rem;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="modal.open('editProfileModal')">✏ Редактировать профиль</button>
+      <button class="btn btn-ghost" onclick="modal.open('achievementsModal')">🏅 Достижения</button>
+      <button class="btn btn-ghost" id="crewManageBtn" onclick="modal.open('crewModal')">Экипаж</button>
+      <span id="otherUserActions" style="display:none;gap:0.5rem;flex-wrap:wrap">
+        <button class="btn btn-ghost" style="color:var(--fire-500)" onclick="modal.open('shtrafbatModal')">⚠ Штрафбат</button>
+        <button class="btn btn-ghost" onclick="toast.success('Добавлен в экипаж')">➕ В экипаж</button>
+      </span>
+      <button class="btn btn-ghost" onclick="window.location.href='index.html'" style="margin-left:auto;color:var(--text-tertiary)">🚪 Выйти</button>
+    </div>
+
+    <!-- История наград -->
+    <div class="sidebar-widget" style="margin-top:1.5rem">
+      <div class="sidebar-widget-title">🏆 История наград</div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🥇</span>
+        <div style="flex:1">
+          <div class="hof-name">Танкист недели</div>
+          <div class="hof-reason">12 мая 2026 — 5 гайдов, 48 респектов</div>
+        </div>
+      </div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🥈</span>
+        <div style="flex:1">
+          <div class="hof-name">Танкист недели</div>
+          <div class="hof-reason">5 мая 2026 — помощь 12 новичкам</div>
+        </div>
+      </div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🏅</span>
+        <div style="flex:1">
+          <div class="hof-name">Орден «За заслуги»</div>
+          <div class="hof-reason">За 1000 качественных постов</div>
+        </div>
+      </div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🎖</span>
+        <div style="flex:1">
+          <div class="hof-name">Медаль «Спаситель»</div>
+          <div class="hof-reason">За спасение 5 тем от флуда</div>
+        </div>
+      </div>
+    </div>
+  <!-- ===== МОДАЛКА: РЕДАКТИРОВАНИЕ ПРОФИЛЯ ===== -->
+  <div class="modal-overlay" id="editProfileModal">
+    <div class="modal" style="max-width:520px;position:relative">
+      <button class="modal-close" onclick="modal.close('editProfileModal')">✕</button>
+      <h2>✏ Редактировать танковый паспорт</h2>
+
+      <div class="flex items-center gap-4" style="margin-bottom:1.5rem;flex-wrap:wrap">
+        <div class="avatar-wrap" style="margin:0">
+          <img class="avatar avatar-xl" data-avatar="me" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23a67c28' width='100' height='100'/%3E%3Ccircle fill='%23e8cc6e' cx='50' cy='35' r='22'/%3E%3Ctext x='50' y='42' text-anchor='middle' font-size='12' fill='%234d3710' font-weight='bold'%3EPolk%3C/text%3E%3C/svg%3E" alt="Avatar">
+          <span class="online-dot" style="width:16px;height:16px;border-width:3px"></span>
+        </div>
+        <div>
+          <p class="text-sm fw-600">Полковник_Медведь</p>
+          <p class="text-xs text-tertiary">Звание: Полковник</p>
+          <button class="btn btn-ghost btn-sm" id="avatarUploadBtn" style="margin-top:4px">🖼 Сменить аватар</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Цитата дня</label>
+        <input class="input" id="editQuote" value="Броня крепка и танки наши быстры!">
+      </div>
+      <div class="form-group">
+        <label>Реальный полк / профессия</label>
+        <input class="input" id="editProfession" value="Менеджер по продажам">
+      </div>
+      <div class="form-group">
+        <label>Город</label>
+        <input class="input" id="editCity" value="Москва">
+      </div>
+      <div class="form-group">
+        <label>Любимый танк</label>
+        <select class="input" id="editTank">
+          <option>E 50 M</option>
+          <option>IS-7</option>
+          <option>Maus</option>
+          <option>KV-2</option>
+          <option>Объект 140</option>
+        </select>
+      </div>
+      <div class="flex gap-2" style="margin-top:1.5rem;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="saveProfile()">💾 Сохранить</button>
+        <button class="btn btn-ghost" onclick="modal.close('editProfileModal')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МОДАЛКА: ШТРАФБАТ ===== -->
+  <div class="modal-overlay" id="shtrafbatModal">
+    <div class="modal" style="max-width:420px;position:relative">
+      <button class="modal-close" onclick="modal.close('shtrafbatModal')">✕</button>
+      <h2>⚠ Штрафбат</h2>
+      <p class="text-sm text-tertiary" style="margin-bottom:1rem">Временная блокировка возможности писать сообщения</p>
+
+      <div class="form-group">
+        <label>Пользователь</label>
+        <select class="input">
+          <option>Полковник_Медведь</option>
+          <option>Serg_76</option>
+          <option>Vova_Na_KV2</option>
+          <option>Рядовой_Петров</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Время блокировки</label>
+        <select class="input">
+          <option>30 минут</option>
+          <option selected>2 часа</option>
+          <option>6 часов</option>
+          <option>24 часа</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Причина</label>
+        <textarea class="input" rows="2" placeholder="Флуд / оскорбления / спам..."></textarea>
+      </div>
+
+      <div class="flex gap-2">
+        <button class="btn btn-fire" onclick="toast.warning('Пользователь отправлен в штрафбат на 2 часа');modal.close('shtrafbatModal')">⛔ Отправить в штрафбат</button>
+        <button class="btn btn-ghost" onclick="modal.close('shtrafbatModal')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МОДАЛКА: ВСЕ ДОСТИЖЕНИЯ ===== -->
+  <div class="modal-overlay" id="achievementsModal">
+    <div class="modal" style="max-width:580px;position:relative">
+      <button class="modal-close" onclick="modal.close('achievementsModal')">✕</button>
+      <h2>🏅 Все достижения <span class="text-sm text-tertiary">(12 из 24)</span></h2>
+
+      <div class="achievement-item">
+        <div class="ach-icon">💬</div>
+        <div class="ach-info">
+          <div class="ach-name">Болтун</div>
+          <div class="ach-desc">50 постов</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:100%"></div></div></div>
+        <span class="ach-progress" style="font-size:0.72rem">✅</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">💬</div>
+        <div class="ach-info">
+          <div class="ach-name">100 постов</div>
+          <div class="ach-desc">Напиши 100 сообщений</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:82%"></div></div></div>
+        <span class="ach-progress">82%</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">🎓</div>
+        <div class="ach-info">
+          <div class="ach-name">Наставник</div>
+          <div class="ach-desc">Помоги 10 новичкам</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:40%"></div></div></div>
+        <span class="ach-progress">4/10</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">🛡</div>
+        <div class="ach-info">
+          <div class="ach-name">Хранитель порядка</div>
+          <div class="ach-desc">Спаси тему от флуда</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
+        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">🎯</div>
+        <div class="ach-info">
+          <div class="ach-name">Снайпер</div>
+          <div class="ach-desc">5 реплеев с 7+ убийствами</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
+        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">📸</div>
+        <div class="ach-info">
+          <div class="ach-name">Репортёр</div>
+          <div class="ach-desc">Загрузи 10 скриншотов</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:60%"></div></div></div>
+        <span class="ach-progress">6/10</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">❤️</div>
+        <div class="ach-info">
+          <div class="ach-name">Душа компании</div>
+          <div class="ach-desc">Получи 50 респектов</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:94%"></div></div></div>
+        <span class="ach-progress">47/50</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">⭐</div>
+        <div class="ach-info">
+          <div class="ach-name">Ветеран</div>
+          <div class="ach-desc">Быть на форуме больше года</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:100%"></div></div></div>
+        <span class="ach-progress" style="font-size:0.72rem">✅</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🔥</div>
+        <div class="ach-info">
+          <div class="ach-name">Танкист недели</div>
+          <div class="ach-desc">Стать танкистом недели 3 раза</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:66%"></div></div></div>
+        <span class="ach-progress">2/3</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">👑</div>
+        <div class="ach-info">
+          <div class="ach-name">Генерал форума</div>
+          <div class="ach-desc">Достигни высшего звания</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
+        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🎮</div>
+        <div class="ach-info">
+          <div class="ach-name">Гайд-мейкер</div>
+          <div class="ach-desc">Создай 10 гайдов</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
+        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🤝</div>
+        <div class="ach-info">
+          <div class="ach-name">Свой в доску</div>
+          <div class="ach-desc">Добавь 5 человек в экипаж</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
+        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МОДАЛКА: УПРАВЛЕНИЕ ЭКИПАЖЕМ ===== -->
+  <div class="modal-overlay" id="crewModal">
+    <div class="modal" style="max-width:520px;position:relative">
+      <button class="modal-close" onclick="modal.close('crewModal')">✕</button>
+      <h2 id="crewModalTitle">Мой экипаж</h2>
+
+      <div class="form-group">
+        <label>Добавить бойца</label>
+        <input class="input" type="text" placeholder="Поиск по позывному..." id="crewSearch" oninput="filterCrewSearch(this.value)">
+      </div>
+
+      <div id="crewSearchResults" style="max-height:160px;overflow-y:auto;margin-bottom:1rem;display:none"></div>
+
+      <div style="border-top:1px solid var(--border-color);padding-top:0.75rem">
+        <div style="font-size:0.82rem;font-weight:600;color:var(--text-tertiary);margin-bottom:0.5rem">Текущий экипаж</div>
+        <div id="crewList"></div>
+      </div>
+
+      <div id="crewModalStats" style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid var(--border-color);display:flex;gap:1.5rem;font-size:0.82rem"></div>
+    </div>
+  </div>
+
+  </main>
+
+  <!-- Сайдбар профиля -->
+  <aside class="sidebar">
+
+    <!-- Достижения -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">🏅 Достижения (12/24)</div>
+      <div class="achievement-item">
+        <div class="ach-icon">💬</div>
+        <div class="ach-info">
+          <div class="ach-name">100 постов</div>
+          <div class="ach-desc">Напиши 100 сообщений</div>
+        </div>
+        <span class="ach-progress">82%</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">🎓</div>
+        <div class="ach-info">
+          <div class="ach-name">Наставник</div>
+          <div class="ach-desc">Помоги 10 новичкам</div>
+        </div>
+        <span class="ach-progress">40%</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🛡</div>
+        <div class="ach-info">
+          <div class="ach-name">Хранитель порядка</div>
+          <div class="ach-desc">Спаси тему от флуда</div>
+        </div>
+        <span class="ach-progress">🔒</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🎯</div>
+        <div class="ach-info">
+          <div class="ach-name">Снайпер</div>
+          <div class="ach-desc">5 реплеев с 7+ убийствами</div>
+        </div>
+        <span class="ach-progress">🔒</span>
+      </div>
+      <button class="btn btn-ghost btn-sm w-full" style="margin-top:6px" onclick="modal.open('achievementsModal')">🏅 Все достижения (12/24)</button>
+    </div>
+
+    <!-- Боевой путь -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">📜 Боевой путь</div>
+      <div style="font-size:0.82rem">
+        <p style="padding:0.4rem 0;border-bottom:1px solid var(--border-light)">
+          <strong>🎯</strong> Разбор реплея: Prokhorovka<br>
+          <span class="text-xs text-tertiary">Тактический полигон · сегодня, 14:23</span>
+          <span style="float:right;color:var(--olive-600)">+24 ↑</span>
+        </p>
+        <p style="padding:0.4rem 0;border-bottom:1px solid var(--border-light)">
+          <strong>💬</strong> Re: Патч 1.26 — кто чего накопил?<br>
+          <span class="text-xs text-tertiary">Ламповая броня · вчера, 21:45</span>
+          <span style="float:right;color:var(--olive-600)">+12 ↑</span>
+        </p>
+        <p style="padding:0.4rem 0">
+          <strong>👍</strong> Поставил респект Serg_76<br>
+          <span class="text-xs text-tertiary">сегодня, 15:10</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Настройки -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">⚙ Настройки</div>
+      <div style="font-size:0.85rem">
+        <label class="form-checkbox" style="padding:0.4rem 0;cursor:pointer">
+          <input type="checkbox" id="setting-notify" checked> Уведомления о новых ответах
+        </label>
+        <label class="form-checkbox" style="padding:0.4rem 0;cursor:pointer">
+          <input type="checkbox" id="setting-replays" checked> Подписка на реплеи
+        </label>
+        <label class="form-checkbox" style="padding:0.4rem 0;cursor:pointer">
+          <input type="checkbox" id="setting-theme" checked> Тёмная тема «Броня на ночь»
+        </label>
+      </div>
+      <button class="btn btn-ghost btn-sm w-full" style="margin-top:8px" onclick="toast.show('Смена пароля будет доступна после подключения backend','info')">🔑 Сменить пароль</button>
+    </div>
+  </aside>
+</div>
+
+<div id="footerPlaceholder"></div>
+<div id="chatPlaceholder"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/components.js"></script>
+<script src="js/chat.js"></script>
+<script>
+  var PROFILE_KEY = 'tank-profile';
+
+  function saveProfile() {
+    var data = {
+      name: 'Полковник_Медведь',
+      rank: '★★★ Полковник',
+      rankClass: 'rank-colonel',
+      rankLabel: 'Полковник',
+      quote: document.getElementById('editQuote').value,
+      profession: document.getElementById('editProfession').value,
+      city: document.getElementById('editCity').value,
+      tank: document.getElementById('editTank').value
+    };
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(data));
+    applyProfileDisplay(data);
+    toast.success('Профиль обновлён!');
+    modal.close('editProfileModal');
+  }
+
+  function applyProfileDisplay(data) {
+    var el = document.getElementById('displayQuote');
+    if (el) el.textContent = '\u00AB' + data.quote + '\u00BB';
+    el = document.getElementById('displayProfession');
+    if (el) el.textContent = data.profession;
+    el = document.getElementById('displayCity');
+    if (el) el.textContent = data.city;
+    el = document.getElementById('displayTank');
+    if (el) el.textContent = data.tank;
+  }
+
+  function loadProfile() {
+    var raw = localStorage.getItem(PROFILE_KEY);
+    if (!raw) {
+      var def = {
+        name: 'Полковник_Медведь',
+        rank: '★★★ Полковник',
+        rankClass: 'rank-colonel',
+        rankLabel: 'Полковник',
+        quote: 'Броня крепка и танки наши быстры!',
+        profession: 'Менеджер по продажам',
+        city: 'Москва',
+        tank: 'E 50 M'
+      };
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(def));
+      raw = localStorage.getItem(PROFILE_KEY);
+    }
+    var data = JSON.parse(raw);
+    applyProfileDisplay(data);
+    var el = document.getElementById('editQuote');
+    if (el) el.value = data.quote || 'Броня крепка и танки наши быстры!';
+    el = document.getElementById('editProfession');
+    if (el) el.value = data.profession || 'Менеджер по продажам';
+    el = document.getElementById('editCity');
+    if (el) el.value = data.city || 'Москва';
+    el = document.getElementById('editTank');
+    if (el) el.value = data.tank || 'E 50 M';
+  }
+
+  var SETTINGS_KEY = 'tank-settings';
+
+  function saveSettings() {
+    var data = {
+      notify: document.getElementById('setting-notify').checked,
+      replays: document.getElementById('setting-replays').checked,
+      theme: document.getElementById('setting-theme').checked
+    };
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
+    toast.success('Настройки сохранены');
+  }
+
+  function loadSettings() {
+    var raw = localStorage.getItem(SETTINGS_KEY);
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    var el = document.getElementById('setting-notify');
+    if (el) el.checked = data.notify !== false;
+    el = document.getElementById('setting-replays');
+    if (el) el.checked = data.replays !== false;
+    el = document.getElementById('setting-theme');
+    if (el) el.checked = data.theme !== false;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    loadProfile();
+    loadSettings();
+
+    document.querySelectorAll('#setting-notify, #setting-replays, #setting-theme').forEach(function (cb) {
+      cb.addEventListener('change', saveSettings);
+    });
+
+    var params = new URLSearchParams(window.location.search);
+
+    if (params.has('user')) {
+      var otherActions = document.getElementById('otherUserActions');
+      if (otherActions) otherActions.style.display = 'inline-flex';
+    }
+
+    if (params.has('crew')) {
+      modal.open('crewModal');
+      var url = new URL(window.location);
+      url.searchParams.delete('crew');
+      window.history.replaceState({}, '', url);
+    }
+  });
+
+  function filterCrewSearch(query) {
+    var results = document.getElementById('crewSearchResults');
+    query = query.trim().toLowerCase();
+    if (!query) { results.style.display = 'none'; results.innerHTML = ''; return; }
+
+    var candidates = [
+      { name: 'Полковник_Медведь', rank: '★★★ Полковник', rankClass: 'rank-colonel', online: true },
+      { name: 'Tankist_1979', rank: '★★ Лейтенант', rankClass: 'rank-lieutenant', online: true },
+      { name: 'Serg_76', rank: '★ Сержант', rankClass: 'rank-sergeant', online: true },
+      { name: 'Vova_Na_KV2', rank: 'Ефрейтор', rankClass: 'rank-corporal', online: true },
+      { name: 'Рядовой_Петров', rank: 'Рядовой', rankClass: 'rank-private', online: false },
+      { name: 'Serega_Na_Objekte', rank: '★ Сержант', rankClass: 'rank-sergeant', online: true },
+      { name: 'Командир', rank: 'Генерал', rankClass: 'rank-general', online: true },
+      { name: 'Maus_22', rank: 'Ефрейтор', rankClass: 'rank-corporal', online: false },
+      { name: 'WoT_forever', rank: '★★ Лейтенант', rankClass: 'rank-lieutenant', online: true },
+      { name: 'IS7_fan', rank: '', rankClass: '', online: true }
+    ];
+
+    var matched = candidates.filter(function (c) {
+      return c.name.toLowerCase().indexOf(query) !== -1;
+    });
+
+    if (!matched.length) {
+      results.style.display = 'block';
+      results.innerHTML = '<div class="text-sm text-tertiary" style="padding:0.5rem">Никого не найдено</div>';
+      return;
+    }
+
+    results.style.display = 'block';
+    results.innerHTML = matched.map(function (c) {
+      var statusClass = c.online ? 'online' : 'offline';
+      var rankHtml = c.rank ? '<span class="rank-badge" style="font-size:0.55rem;color:var(--' + c.rankClass + ');border-color:var(--' + c.rankClass + ')">' + c.rank + '</span>' : '';
+      return '<div class="online-item" style="padding:0.35rem 0">'
+        + '<span class="status-dot-sm ' + statusClass + '"></span>'
+        + '<a href="profile.html?user=' + encodeURIComponent(c.name) + '" class="name" style="color:var(--text-primary);text-decoration:none">' + c.name + '</a>'
+        + rankHtml
+        + '<button class="pa-btn" onclick="addToCrew(\'' + c.name + '\', this)" style="font-size:0.7rem;margin-left:auto">➕</button>'
+        + '</div>';
+    }).join('');
+  }
+
+  function refreshCrewStats() {
+    var crew = window.crew.get();
+    var online = crew.filter(function(m){return m.online;}).length;
+    var title = document.getElementById('crewModalTitle');
+    var stats = document.getElementById('crewModalStats');
+    if (title) title.innerHTML = 'Мой экипаж <span class="text-sm text-tertiary">('+crew.length+' бойца)</span>';
+    if (stats) stats.innerHTML = '<span>👥 Всего: <strong>'+crew.length+'</strong></span><span>🟢 Онлайн: <strong>'+online+'</strong></span><span>🏆 Совместных боёв: <strong>147</strong></span>';
+  }
+
+  function addToCrew(name, btn) {
+    if (window.crew.add(name)) {
+      toast.success(name + ' добавлен в экипаж');
+      btn.textContent = '✅';
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      if (window.crew.renderList) window.crew.renderList();
+      if (window.crew.renderChips) window.crew.renderChips();
+      refreshCrewStats();
+    } else {
+      toast.warning(name + ' уже в экипаже');
+    }
+  }
+
+  // Перехватываем открытие модалки экипажа для обновления
+  var origCrewOpen = document.getElementById('crewManageBtn');
+  if (origCrewOpen) {
+    origCrewOpen.addEventListener('click', function () {
+      setTimeout(function () {
+        if (window.crew.renderList) window.crew.renderList();
+        refreshCrewStats();
+      }, 50);
+    });
+  }
+</script>
+</body>
+</html>

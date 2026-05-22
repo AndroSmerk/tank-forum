@@ -1,0 +1,59 @@
+/* ================================================================
+   ТЁМНАЯ ТЕМА — «Броня на ночь»
+   ================================================================ */
+
+[data-theme="night"] {
+  --bg-body: #1a1b16;
+  --bg-card: #24251e;
+  --bg-card-alt: #2a2c23;
+  --bg-input: #2a2c23;
+  --bg-overlay: rgba(0, 0, 0, 0.7);
+
+  --text-primary: #e6e9ce;
+  --text-secondary: #b3b89e;
+  --text-tertiary: #7a8058;
+  --text-inverse: #1a1b16;
+
+  --border-color: #3d4030;
+  --border-light: #2b2d1f;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ----- Тумблер ----- */
+.theme-toggle {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: var(--olive-700);
+  border-radius: 11px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  flex-shrink: 0;
+}
+.theme-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--olive-200);
+  transition: transform 0.3s, background 0.3s;
+}
+[data-theme="night"] .theme-toggle {
+  background: var(--gold-600);
+}
+[data-theme="night"] .theme-toggle::after {
+  transform: translateX(18px);
+  background: #1a1b16;
+}
+
+/* ----- Скроллбар под тему ----- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-body); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--olive-500); }
