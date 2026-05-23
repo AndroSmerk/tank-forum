@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Броня Крепка — Танковый паспорт</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .passport-cover {
+      height: 110px;
+      background: linear-gradient(135deg, var(--olive-800), var(--olive-600));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      position: relative;
+    }
+    .passport-body {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.5rem 1.5rem 1.5rem;
+    }
+    .passport-left { text-align: center; }
+    .passport-left .avatar-wrap { margin-top: -60px; }
+    .passport-left .username { font-size: 1.2rem; font-weight: 700; margin: 0.5rem 0 0.2rem; }
+    .passport-left .quote { font-size: 0.78rem; font-style: italic; color: var(--text-tertiary); margin-top: 0.5rem; }
+    .passport-info { flex: 1; }
+    .passport-info .row {
+      display: flex;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.85rem;
+    }
+    .passport-info .row:last-child { border-bottom: none; }
+    .passport-info .row .plabel { width: 140px; flex-shrink: 0; color: var(--text-tertiary); font-weight: 500; }
+    .passport-info .row .pvalue { flex: 1; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+<div id="headerPlaceholder"></div>
+
+<div class="page-layout">
+  <main class="main-content">
+
+    <div class="breadcrumbs" style="margin-bottom:0.25rem">
+      <a href="feed.html">Форум</a> <span>/</span>
+      <span>Танковый паспорт</span>
+    </div>
+
+    <!-- Паспорт -->
+    <div class="sidebar-widget" style="padding:0;overflow:hidden">
+      <div class="passport-cover" style="display:flex;align-items:center;gap:12px;padding:0 1.5rem">
+        <span style="font-size:2rem;color:var(--gold-600);filter:drop-shadow(0 0 6px rgba(166,124,40,0.3));line-height:1">⬡</span>
+        <span style="font-size:0.82rem;font-weight:600;color:var(--gold-400);letter-spacing:2px;margin-top:2px">ТАНКОВЫЙ ПАСПОРТ</span>
+        <span style="margin-left:auto;font-size:0.7rem;color:var(--olive-500)">№ ТФ-2026-0047</span>
+      </div>
+
+      <div class="passport-body" style="flex-wrap:wrap">
+        <div class="passport-left">
+          <div class="avatar-wrap" style="margin:0 auto">
+            <img class="avatar avatar-xl" data-avatar="me" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23a67c28' width='100' height='100'/%3E%3Ccircle fill='%23e8cc6e' cx='50' cy='35' r='22'/%3E%3Ctext x='50' y='42' text-anchor='middle' font-size='12' fill='%234d3710' font-weight='bold'%3EPolk%3C/text%3E%3C/svg%3E" alt="Avatar">
+            <span class="online-dot" style="width:16px;height:16px;border-width:3px"></span>
+          </div>
+          <div class="username">Полковник_Медведь</div>
+          <span class="rank-badge rank-colonel">★★★ Полковник</span>
+          <div class="medal-strip" style="justify-content:center;margin-top:0.3rem">
+            <span class="medal medal-gold">★</span>
+            <span class="medal medal-gold">★</span>
+            <span class="medal medal-silver">★</span>
+            <span class="medal medal-fire">♥</span>
+          </div>
+          <div class="quote" id="displayQuote">«Броня крепка и танки наши быстры!»</div>
+        </div>
+
+        <div class="passport-info">
+          <div class="row"><span class="plabel">Звание</span><span class="pvalue" style="color:var(--rank-colonel)" id="displayRank">Полковник</span></div>
+          <div class="row"><span class="plabel">Реальный полк</span><span class="pvalue" id="displayProfession">Менеджер по продажам</span></div>
+          <div class="row"><span class="plabel">Возраст</span><span class="pvalue" id="displayAge">37 лет</span></div>
+          <div class="row"><span class="plabel">Город</span><span class="pvalue" id="displayCity">Москва</span></div>
+          <div class="row"><span class="plabel">На форуме</span><span class="pvalue" id="displayMemberSince">2 года 7 месяцев</span></div>
+          <div class="row"><span class="plabel">Тем создано</span><span class="pvalue" id="displayTopicCount">47</span></div>
+          <div class="row"><span class="plabel">Постов</span><span class="pvalue" id="displayPostCount">3 421</span></div>
+          <div class="row"><span class="plabel">Любимый танк</span><span class="pvalue" id="displayTank" style="color:var(--fire-500);font-weight:700">E 50 M</span></div>
+          <div class="row"><span class="plabel">Клан</span><span class="pvalue"><span id="displayClan">🔵 Тяжеловесы</span></span></div>
+          <div class="row"><span class="plabel">Респектов</span><span class="pvalue" style="color:var(--gold-500);font-weight:700"><span id="displayRespects">247</span> 👍</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⛔ Баннер штрафбата (скрыт по умолчанию) -->
+    <div id="bannedBanner" style="display:none;margin-top:1rem;padding:1rem;border:2px solid var(--fire-500);border-radius:var(--radius-lg);background:rgba(180,60,40,0.08);text-align:center">
+      <div style="font-size:3rem;margin-bottom:0.5rem">⛔</div>
+      <h2 style="color:var(--fire-500);margin:0">ШТРАФБАТ</h2>
+      <p class="text-sm text-tertiary" style="margin-top:0.5rem">Пользователь заблокирован администрацией</p>
+    </div>
+
+    <div class="flex gap-2" style="margin-top:1rem;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="modal.open('editProfileModal')">✏ Редактировать профиль</button>
+      <button class="btn btn-ghost" onclick="modal.open('achievementsModal')">🏅 Достижения</button>
+      <span id="otherUserActions" style="display:none;gap:0.5rem;flex-wrap:wrap">
+        <button class="btn btn-ghost" onclick="sendMessageToUser()">✉ Написать</button>
+        <button id="banBtn" class="btn btn-ghost" style="color:var(--fire-500)" onclick="shtrafbatUser()">⚠ Штрафбат</button>
+      </span>
+      <button class="btn btn-ghost" onclick="window.location.href='index.html'" style="margin-left:auto;color:var(--text-tertiary)">🚪 Выйти</button>
+    </div>
+
+    <div class="sidebar-widget" style="margin-top:1.5rem">
+      <div class="sidebar-widget-title">🏆 История наград</div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🥇</span>
+        <div style="flex:1">
+          <div class="hof-name">Танкист недели</div>
+          <div class="hof-reason">12 мая 2026 — 5 гайдов, 48 респектов</div>
+        </div>
+      </div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🥈</span>
+        <div style="flex:1">
+          <div class="hof-name">Танкист недели</div>
+          <div class="hof-reason">5 мая 2026 — помощь 12 новичкам</div>
+        </div>
+      </div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🏅</span>
+        <div style="flex:1">
+          <div class="hof-name">Орден «За заслуги»</div>
+          <div class="hof-reason">За 1000 качественных постов</div>
+        </div>
+      </div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🎖</span>
+        <div style="flex:1">
+          <div class="hof-name">Медаль «Спаситель»</div>
+          <div class="hof-reason">За спасение 5 тем от флуда</div>
+        </div>
+      </div>
+    </div>
+  <!-- ===== МОДАЛКА: РЕДАКТИРОВАНИЕ ПРОФИЛЯ ===== -->
+  <div class="modal-overlay" id="editProfileModal">
+    <div class="modal" style="max-width:520px;position:relative">
+      <button class="modal-close" onclick="modal.close('editProfileModal')">✕</button>
+      <h2>✏ Редактировать танковый паспорт</h2>
+
+      <div class="flex items-center gap-4" style="margin-bottom:1.5rem;flex-wrap:wrap">
+        <div class="avatar-wrap" style="margin:0">
+          <img class="avatar avatar-xl" data-avatar="me" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23a67c28' width='100' height='100'/%3E%3Ccircle fill='%23e8cc6e' cx='50' cy='35' r='22'/%3E%3Ctext x='50' y='42' text-anchor='middle' font-size='12' fill='%234d3710' font-weight='bold'%3EPolk%3C/text%3E%3C/svg%3E" alt="Avatar">
+          <span class="online-dot" style="width:16px;height:16px;border-width:3px"></span>
+        </div>
+        <div>
+          <p class="text-sm fw-600">Полковник_Медведь</p>
+          <p class="text-xs text-tertiary">Звание: Полковник</p>
+          <button class="btn btn-ghost btn-sm" id="avatarUploadBtn" style="margin-top:4px">🖼 Сменить аватар</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Цитата дня</label>
+        <input class="input" id="editQuote" value="Броня крепка и танки наши быстры!">
+      </div>
+      <div class="form-group">
+        <label>Реальный полк / профессия</label>
+        <input class="input" id="editProfession" value="Менеджер по продажам">
+      </div>
+      <div class="form-group">
+        <label>Город</label>
+        <input class="input" id="editCity" value="Москва">
+      </div>
+      <div class="form-group">
+        <label>Любимый танк</label>
+        <select class="input" id="editTank">
+          <option>E 50 M</option>
+          <option>IS-7</option>
+          <option>Maus</option>
+          <option>KV-2</option>
+          <option>Объект 140</option>
+        </select>
+      </div>
+      <div class="flex gap-2" style="margin-top:1.5rem;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="saveProfile()">💾 Сохранить</button>
+        <button class="btn btn-ghost" onclick="modal.close('editProfileModal')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МОДАЛКА: ШТРАФБАТ ===== -->
+  <div class="modal-overlay" id="shtrafbatModal">
+    <div class="modal" style="max-width:420px;position:relative">
+      <button class="modal-close" onclick="modal.close('shtrafbatModal')">✕</button>
+      <h2>⚠ Штрафбат</h2>
+      <p class="text-sm text-tertiary" style="margin-bottom:1rem">Заблокировать пользователя</p>
+
+      <div class="form-group">
+        <label>Пользователь</label>
+        <input class="input" id="shtrafbatUsername" readonly>
+      </div>
+
+      <div class="flex gap-2" style="margin-top:1rem">
+        <button class="btn btn-fire" id="shtrafbatBtn" onclick="executeShtrafbat()">⛔ Заблокировать</button>
+        <button class="btn btn-ghost" onclick="modal.close('shtrafbatModal')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МОДАЛКА: ВСЕ ДОСТИЖЕНИЯ ===== -->
+  <div class="modal-overlay" id="achievementsModal">
+    <div class="modal" style="max-width:580px;position:relative">
+      <button class="modal-close" onclick="modal.close('achievementsModal')">✕</button>
+      <h2>🏅 Все достижения <span class="text-sm text-tertiary">(12 из 24)</span></h2>
+
+      <div class="achievement-item">
+        <div class="ach-icon">💬</div>
+        <div class="ach-info">
+          <div class="ach-name">Болтун</div>
+          <div class="ach-desc">50 постов</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:100%"></div></div></div>
+        <span class="ach-progress" style="font-size:0.72rem">✅</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">💬</div>
+        <div class="ach-info">
+          <div class="ach-name">100 постов</div>
+          <div class="ach-desc">Напиши 100 сообщений</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:82%"></div></div></div>
+        <span class="ach-progress">82%</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">🎓</div>
+        <div class="ach-info">
+          <div class="ach-name">Наставник</div>
+          <div class="ach-desc">Помоги 10 новичкам</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:40%"></div></div></div>
+        <span class="ach-progress">4/10</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">🛡</div>
+        <div class="ach-info">
+          <div class="ach-name">Хранитель порядка</div>
+          <div class="ach-desc">Спаси тему от флуда</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
+        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">🎯</div>
+        <div class="ach-info">
+          <div class="ach-name">Снайпер</div>
+          <div class="ach-desc">5 реплеев с 7+ убийствами</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
+        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">📸</div>
+        <div class="ach-info">
+          <div class="ach-name">Репортёр</div>
+          <div class="ach-desc">Загрузи 10 скриншотов</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:60%"></div></div></div>
+        <span class="ach-progress">6/10</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">❤️</div>
+        <div class="ach-info">
+          <div class="ach-name">Душа компании</div>
+          <div class="ach-desc">Получи 50 респектов</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:94%"></div></div></div>
+        <span class="ach-progress">47/50</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">⭐</div>
+        <div class="ach-info">
+          <div class="ach-name">Ветеран</div>
+          <div class="ach-desc">Быть на форуме больше года</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:100%"></div></div></div>
+        <span class="ach-progress" style="font-size:0.72rem">✅</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🔥</div>
+        <div class="ach-info">
+          <div class="ach-name">Танкист недели</div>
+          <div class="ach-desc">Стать танкистом недели 3 раза</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:66%"></div></div></div>
+        <span class="ach-progress">2/3</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">👑</div>
+        <div class="ach-info">
+          <div class="ach-name">Генерал форума</div>
+          <div class="ach-desc">Достигни высшего звания</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
+        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🎮</div>
+        <div class="ach-info">
+          <div class="ach-name">Гайд-мейкер</div>
+          <div class="ach-desc">Создай 10 гайдов</div>
+        </div>
+        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
+        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  </main>
+
+  <!-- Сайдбар профиля -->
+  <aside class="sidebar">
+
+    <!-- Достижения -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">🏅 Достижения (12/24)</div>
+      <div class="achievement-item">
+        <div class="ach-icon">💬</div>
+        <div class="ach-info">
+          <div class="ach-name">100 постов</div>
+          <div class="ach-desc">Напиши 100 сообщений</div>
+        </div>
+        <span class="ach-progress">82%</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">🎓</div>
+        <div class="ach-info">
+          <div class="ach-name">Наставник</div>
+          <div class="ach-desc">Помоги 10 новичкам</div>
+        </div>
+        <span class="ach-progress">40%</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🛡</div>
+        <div class="ach-info">
+          <div class="ach-name">Хранитель порядка</div>
+          <div class="ach-desc">Спаси тему от флуда</div>
+        </div>
+        <span class="ach-progress">🔒</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🎯</div>
+        <div class="ach-info">
+          <div class="ach-name">Снайпер</div>
+          <div class="ach-desc">5 реплеев с 7+ убийствами</div>
+        </div>
+        <span class="ach-progress">🔒</span>
+      </div>
+      <button class="btn btn-ghost btn-sm w-full" style="margin-top:6px" onclick="modal.open('achievementsModal')">🏅 Все достижения (12/24)</button>
+    </div>
+
+    <!-- Боевой путь -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">📜 Боевой путь</div>
+      <div style="font-size:0.82rem">
+        <p style="padding:0.4rem 0;border-bottom:1px solid var(--border-light)">
+          <strong>🎯</strong> Разбор реплея: Prokhorovka<br>
+          <span class="text-xs text-tertiary">Тактический полигон · сегодня, 14:23</span>
+          <span style="float:right;color:var(--olive-600)">+24 ↑</span>
+        </p>
+        <p style="padding:0.4rem 0;border-bottom:1px solid var(--border-light)">
+          <strong>💬</strong> Re: Патч 1.26 — кто чего накопил?<br>
+          <span class="text-xs text-tertiary">Ламповая броня · вчера, 21:45</span>
+          <span style="float:right;color:var(--olive-600)">+12 ↑</span>
+        </p>
+        <p style="padding:0.4rem 0">
+          <strong>👍</strong> Поставил респект Serg_76<br>
+          <span class="text-xs text-tertiary">сегодня, 15:10</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Настройки -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">⚙ Настройки</div>
+      <div style="font-size:0.85rem">
+        <label class="form-checkbox" style="padding:0.4rem 0;cursor:pointer">
+          <input type="checkbox" id="setting-notify" checked> Уведомления о новых ответах
+        </label>
+        <label class="form-checkbox" style="padding:0.4rem 0;cursor:pointer">
+          <input type="checkbox" id="setting-replays" checked> Подписка на реплеи
+        </label>
+        <label class="form-checkbox" style="padding:0.4rem 0;cursor:pointer">
+          <input type="checkbox" id="setting-theme" checked> Тёмная тема «Броня на ночь»
+        </label>
+      </div>
+      <button class="btn btn-ghost btn-sm w-full" style="margin-top:8px" onclick="toast.show('Смена пароля будет доступна после подключения backend','info')">🔑 Сменить пароль</button>
+    </div>
+  </aside>
+</div>
+
+<div id="footerPlaceholder"></div>
+<div id="chatPlaceholder"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/components.js"></script>
+<script src="js/chat.js?v=2"></script>
+<script>
+  var SETTINGS_KEY = 'tank-settings';
+  var currentUserId = null;
+  var isOwnProfile = true;
+
+  function buildAvatarImg(username) {
+    if (!username) username = '?';
+    var letter = username.charAt(0).toUpperCase();
+    var colors = ['4e5669','7a8058','b8432f','a67c28','5a5f44','8a8e7a','9da370','6b5070','3d6b5e','8b5e3c'];
+    var hash = 0;
+    for (var i = 0; i < username.length; i++) { hash = username.charCodeAt(i) + ((hash << 5) - hash); }
+    var c = colors[Math.abs(hash) % colors.length];
+    var svg = '%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect fill=\'%23' + c + '\' width=\'100\' height=\'100\'/%3E%3Ccircle fill=\'%23d4d9b0\' cx=\'50\' cy=\'35\' r=\'22\'/%3E%3Ctext x=\'50\' y=\'42\' text-anchor=\'middle\' font-size=\'16\' fill=\'%233d4030\' font-weight=\'bold\'%3E' + encodeURIComponent(letter) + '%3C/text%3E%3C/svg%3E';
+    return 'data:image/svg+xml,' + svg;
+  }
+
+  function formatProfileDate(dateStr) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr);
+    var now = new Date();
+    var diff = now - d;
+    var days = Math.floor(diff / 86400000);
+    var months = Math.floor(days / 30);
+    var years = Math.floor(months / 12);
+    if (years > 0) return years + ' г ' + (months % 12) + ' мес';
+    if (months > 0) return months + ' мес';
+    if (days > 0) return days + ' дн';
+    return 'только что';
+  }
+
+  async function loadUserProfile(targetUserId) {
+    try {
+      var user = await api.get('/api/users/' + targetUserId);
+      if (!user) return null;
+      return user;
+    } catch (_) { return null; }
+  }
+
+  async function loadProfilePage() {
+    var params = new URLSearchParams(window.location.search);
+    var targetUser = params.get('user');
+
+    if (!api.isLoggedIn() && !targetUser) { window.location.href = 'index.html'; return; }
+
+    if (targetUser) {
+      if (targetUser === 'self') {
+        currentUserId = parseInt(api.getUserId() || '0');
+        isOwnProfile = true;
+      } else {
+        // Search for user by username
+        try {
+          var users = await api.get('/api/users/search?q=' + encodeURIComponent(targetUser));
+          if (users && users.length > 0) {
+            currentUserId = users[0].id;
+          }
+          isOwnProfile = api.isLoggedIn() && currentUserId === parseInt(api.getUserId() || '0');
+        } catch (_) {
+          toast.error('Пользователь не найден');
+          return;
+        }
+      }
+    } else {
+      currentUserId = parseInt(api.getUserId() || '0');
+      isOwnProfile = true;
+    }
+
+    if (!currentUserId || currentUserId === 0) {
+      if (api.isLoggedIn()) currentUserId = parseInt(api.getUserId());
+      else { window.location.href = 'index.html'; return; }
+    }
+
+    var userData = null;
+    if (api.isLoggedIn()) {
+      userData = await loadUserProfile(currentUserId);
+    }
+
+    if (!userData) {
+      if (api.isLoggedIn()) {
+        userData = await loadUserProfile(api.getUserId());
+        if (userData) currentUserId = parseInt(api.getUserId());
+      }
+    }
+
+    if (userData) {
+      applyUserData(userData, isOwnProfile);
+      if (currentUserId) {
+        try {
+          var stats = await api.get('/api/users/' + currentUserId + '/stats');
+          if (stats) applyUserStats(stats);
+        } catch (_) {}
+        try {
+          var clans = await api.get('/api/users/' + currentUserId + '/clans');
+          var clanEl = document.getElementById('displayClan');
+          if (clanEl) clanEl.textContent = clans && clans.length > 0 ? clans.join(', ') : '—';
+        } catch (_) {}
+      }
+    } else {
+      // Fallback to localStorage for display
+      var raw = localStorage.getItem('tank-profile');
+      if (raw) {
+        applyLocalProfile(JSON.parse(raw));
+      }
+    }
+
+  }
+
+  function applyUserData(user, isOwn) {
+    var username = user.username || 'Боец';
+    var displayName = user.displayName || username;
+    var rank = user.rank || '';
+    var rankClass = user.rankClass || '';
+    var quote = user.quote || '';
+    var vocation = user.vocation || '';
+    var city = user.city || '';
+    var age = user.age ? user.age + ' лет' : '';
+    var favoriteTank = user.favoriteTank || '';
+    var respects = user.respects || 0;
+    var medals = user.medals || '';
+    var createdAt = user.createdAt || '';
+    var avatar = user.avatar || '';
+
+    // Apply to page
+    var usernameEls = document.querySelectorAll('.username');
+    usernameEls.forEach(function (el) { el.textContent = displayName; });
+
+    var rankBadge = document.querySelector('.rank-badge');
+    if (rankBadge) {
+      rankBadge.textContent = rank;
+      if (rankClass) {
+        rankBadge.className = 'rank-badge ' + rankClass;
+      }
+    }
+
+    var quoteEl = document.getElementById('displayQuote');
+    if (quoteEl) quoteEl.textContent = quote ? '\u00AB' + quote + '\u00BB' : '';
+
+    var profEl = document.getElementById('displayProfession');
+    if (profEl) profEl.textContent = vocation;
+
+    var ageEl = document.querySelector('.passport-info .row:nth-child(3) .pvalue');
+    if (ageEl) ageEl.textContent = age;
+
+    var cityEl = document.getElementById('displayCity');
+    if (cityEl) cityEl.textContent = city;
+
+    var tankEl = document.getElementById('displayTank');
+    if (tankEl) tankEl.textContent = favoriteTank;
+
+    var respectsEl = document.querySelector('.passport-info .row:last-child .pvalue');
+    if (respectsEl) respectsEl.textContent = respects + ' \uD83D\uDC4D';
+
+    var createdEl = document.querySelector('.passport-info .row:nth-child(5) .pvalue');
+    if (createdEl) createdEl.textContent = formatProfileDate(createdAt);
+
+    var medalStrip = document.querySelector('.medal-strip');
+    if (medalStrip && medals) {
+      var medalMap = { gold: 'medal-gold', silver: 'medal-silver', fire: 'medal-fire' };
+      medalStrip.innerHTML = medals.split(',').map(function (c) {
+        var cls = medalMap[c.trim()] || '';
+        return '<span class="medal ' + cls + '">' + (c.trim() === 'fire' ? '\u2665' : '\u2605') + '</span>';
+      }).join('');
+    }
+
+    // Avatar
+    if (avatar && isOwn) {
+      localStorage.setItem('tank-avatar', avatar);
+      if (window.avatar && window.avatar.apply) window.avatar.apply();
+    } else if (!isOwn) {
+      var mainAvatar = document.querySelector('.passport-left .avatar-xl');
+      if (mainAvatar) {
+        mainAvatar.removeAttribute('data-avatar');
+        mainAvatar.src = avatar || buildAvatarImg(username);
+      }
+    }
+
+    // Edit form
+    var editQuote = document.getElementById('editQuote');
+    if (editQuote) editQuote.value = quote;
+    var editProf = document.getElementById('editProfession');
+    if (editProf) editProf.value = vocation;
+    var editCity = document.getElementById('editCity');
+    if (editCity) editCity.value = city;
+    var editTank = document.getElementById('editTank');
+    if (editTank) editTank.value = favoriteTank;
+
+    // Баннер и кнопка штрафбата
+    var bannedBanner = document.getElementById('bannedBanner');
+    var passportCard = document.querySelector('.passport-body');
+    var banBtn = document.getElementById('banBtn');
+    var isAdmin = localStorage.getItem('tank-role') === 'Admin';
+
+    if (user.isBanned) {
+      if (bannedBanner) bannedBanner.style.display = 'block';
+      if (passportCard) passportCard.style.opacity = isAdmin ? '0.5' : '0';
+      if (passportCard) passportCard.style.pointerEvents = isAdmin ? 'auto' : 'none';
+      if (banBtn && isAdmin) {
+        banBtn.textContent = '✅ Разбанить';
+        banBtn.style.color = 'var(--online-color)';
+        banBtn.onclick = function () { unbanUser(currentUserId); };
+      }
+    } else {
+      if (bannedBanner) bannedBanner.style.display = 'none';
+      if (passportCard) passportCard.style.opacity = '1';
+      if (passportCard) passportCard.style.pointerEvents = 'auto';
+    }
+
+    // Show/hide other user actions
+    var otherActions = document.getElementById('otherUserActions');
+    if (otherActions) {
+      otherActions.style.display = isOwn ? 'none' : 'inline-flex';
+      // Показывать кнопку штрафбата только админам
+      if (banBtn) {
+        banBtn.style.display = isAdmin ? '' : 'none';
+      }
+    }
+
+    // Hide edit button for other profiles
+    var editBtn = document.querySelector('button[onclick*="editProfileModal"]');
+    if (editBtn) editBtn.style.display = isOwn ? '' : 'none';
+  }
+
+  function applyLocalProfile(data) {
+    if (!data) return;
+    var quoteEl = document.getElementById('displayQuote');
+    if (quoteEl) quoteEl.textContent = '\u00AB' + (data.quote || '') + '\u00BB';
+    var profEl = document.getElementById('displayProfession');
+    if (profEl) profEl.textContent = data.profession || '';
+    var cityEl = document.getElementById('displayCity');
+    if (cityEl) cityEl.textContent = data.city || '';
+    var tankEl = document.getElementById('displayTank');
+    if (tankEl) tankEl.textContent = data.tank || '';
+  }
+
+  function applyUserStats(stats) {
+    if (!stats) return;
+    var topicCountEl = document.getElementById('displayTopicCount');
+    if (topicCountEl) topicCountEl.textContent = stats.topicCount || 0;
+    var postCountEl = document.getElementById('displayPostCount');
+    if (postCountEl) postCountEl.textContent = (stats.postCount || 0).toLocaleString();
+    var respectsEl = document.getElementById('displayRespects');
+    if (respectsEl) respectsEl.textContent = stats.respectCount || 0;
+  }
+
+  async function saveProfile() {
+    if (!api.isLoggedIn()) { toast.error('Войди в систему'); return; }
+    var userId = api.getUserId();
+    if (!userId) { toast.error('Ошибка идентификации'); return; }
+
+    var quote = document.getElementById('editQuote').value;
+    var profession = document.getElementById('editProfession').value;
+    var city = document.getElementById('editCity').value;
+    var tank = document.getElementById('editTank').value;
+
+    var formData = new FormData();
+    formData.append('Vocation', profession || '');
+    formData.append('City', city || '');
+    formData.append('Quote', quote || '');
+    formData.append('FavoriteTank', tank || '');
+
+    // Check if there's a file input for avatar
+    var avatarInput = document.getElementById('avatarFileInput');
+    if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+      formData.append('AvatarFile', avatarInput.files[0]);
+    }
+
+    try {
+      var updated = await api.upload('PUT', '/api/users/' + userId, formData);
+      if (updated) {
+        applyUserData(updated, true);
+        toast.success('Профиль обновлён!');
+      }
+      modal.close('editProfileModal');
+    } catch (_) {}
+  }
+
+  function saveSettings() {
+    var data = {
+      notify: document.getElementById('setting-notify').checked,
+      replays: document.getElementById('setting-replays').checked,
+      theme: document.getElementById('setting-theme').checked
+    };
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
+    toast.success('Настройки сохранены');
+  }
+
+  function loadSettings() {
+    var raw = localStorage.getItem(SETTINGS_KEY);
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    var el = document.getElementById('setting-notify');
+    if (el) el.checked = data.notify !== false;
+    el = document.getElementById('setting-replays');
+    if (el) el.checked = data.replays !== false;
+    el = document.getElementById('setting-theme');
+    if (el) el.checked = data.theme !== false;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    loadSettings();
+    loadProfilePage();
+    api.post('/api/users/heartbeat');
+    setInterval(function () { api.post('/api/users/heartbeat'); }, 120000);
+
+    document.querySelectorAll('#setting-notify, #setting-replays, #setting-theme').forEach(function (cb) {
+      cb.addEventListener('change', saveSettings);
+    });
+  });
+
+  // Logout
+  var logoutBtn = document.querySelector('button[onclick*="index.html"]');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      api.logout();
+    });
+  }
+
+  function sendMessageToUser() {
+    var username = document.querySelector('.username');
+    if (username) {
+      window.location.href = 'messages.html?to=' + encodeURIComponent(username.textContent);
+    }
+  }
+
+  var shtrafbatTargetId = null;
+
+  function shtrafbatUser() {
+    if (!currentUserId || currentUserId === parseInt(api.getUserId())) {
+      toast.warning('Нельзя заблокировать себя');
+      return;
+    }
+    shtrafbatTargetId = currentUserId;
+    var username = document.querySelector('.username');
+    document.getElementById('shtrafbatUsername').value = username ? username.textContent : 'Пользователь';
+    modal.open('shtrafbatModal');
+  }
+
+  async function executeShtrafbat() {
+    if (!shtrafbatTargetId) { toast.error('Ошибка'); return; }
+    var btn = document.getElementById('shtrafbatBtn');
+    btn.disabled = true;
+    try {
+      await api.post('/api/blockedusers/block', { blockedUserId: shtrafbatTargetId });
+      toast.success('Пользователь отправлен в штрафбат');
+      modal.close('shtrafbatModal');
+      setTimeout(function () { window.location.reload(); }, 500);
+    } catch (_) {
+      btn.disabled = false;
+    }
+  }
+
+  async function unbanUser(userId) {
+    if (!userId) { toast.error('Ошибка'); return; }
+    try {
+      await api.post('/api/blockedusers/unblock', { blockedUserId: userId });
+      toast.success('Пользователь разбанен');
+      setTimeout(function () { window.location.reload(); }, 500);
+    } catch (_) {}
+  }
+</script>
+</body>
+</html>

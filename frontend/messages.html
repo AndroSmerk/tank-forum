@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Броня Крепка — Сообщения</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .msg-tabs { display:flex; gap:0; margin-bottom:1rem; border-bottom:2px solid var(--border-color) }
+    .msg-tab { padding:0.5rem 1.25rem; font-size:0.85rem; font-weight:600; background:none; border:none; border-bottom:2px solid transparent; margin-bottom:-2px; color:var(--text-tertiary); cursor:pointer; font-family:inherit; transition:0.2s }
+    .msg-tab.active { color:var(--text-primary); border-bottom-color:var(--fire-500) }
+    .msg-list { display:flex; flex-direction:column; gap:0 }
+    .msg-item { display:flex; gap:0.75rem; padding:0.75rem; border-bottom:1px solid var(--border-light); cursor:pointer; transition:0.15s }
+    .msg-item:hover { background:var(--bg-card-alt) }
+    .msg-item.unread { background:rgba(166,124,40,0.06) }
+    .msg-item.unread .msg-subject { font-weight:700 }
+    .msg-avatar { width:36px; height:36px; border-radius:50%; flex-shrink:0; background:var(--steel-300) }
+    .msg-body { flex:1; min-width:0 }
+    .msg-header { display:flex; justify-content:space-between; align-items:center; gap:0.5rem }
+    .msg-author { font-weight:600; font-size:0.85rem }
+    .msg-time { font-size:0.72rem; color:var(--text-tertiary); white-space:nowrap }
+    .msg-subject { font-size:0.82rem; margin:0.15rem 0 }
+    .msg-preview { font-size:0.78rem; color:var(--text-tertiary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+    .msg-detail { padding:1rem }
+    .msg-detail-header { margin-bottom:1rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border-light) }
+    .msg-detail-body { font-size:0.9rem; line-height:1.6; white-space:pre-wrap }
+    .empty-state { text-align:center; padding:3rem 1rem; color:var(--text-tertiary); font-size:0.85rem }
+  </style>
+</head>
+<body>
+
+<div id="headerPlaceholder"></div>
+
+<div class="page-layout">
+  <main class="main-content">
+
+    <div class="breadcrumbs">
+      <a href="feed.html">Форум</a> <span>/</span>
+      <span>Личные сообщения</span>
+    </div>
+
+    <div class="flex items-center justify-between" style="margin-bottom:0.5rem;flex-wrap:wrap;gap:0.5rem">
+      <h1 style="font-size:1.2rem">Личные сообщения</h1>
+      <button class="btn btn-primary btn-sm" onclick="showCompose()">✉ Написать</button>
+    </div>
+
+    <div class="msg-tabs">
+      <button class="msg-tab active" data-tab="inbox" onclick="switchTab('inbox')">Входящие</button>
+      <button class="msg-tab" data-tab="sent" onclick="switchTab('sent')">Отправленные</button>
+    </div>
+
+    <div class="sidebar-widget" style="padding:0;overflow:hidden">
+      <div id="msgContainer">
+        <div class="empty-state">Загрузка...</div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="sidebar">
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">✉ О сообщениях</div>
+      <div style="font-size:0.82rem;line-height:1.5;color:var(--text-tertiary)">
+        <p>Личные сообщения видны только отправителю и получателю.</p>
+        <p style="margin-top:0.5rem">Чтобы написать бойцу, открой его профиль и нажми «✉ Написать».</p>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- Compose Modal -->
+<div class="modal-overlay" id="composeModal">
+  <div class="modal" style="max-width:480px;position:relative">
+    <button class="modal-close" onclick="modal.close('composeModal')">✕</button>
+    <h2>✉ Новое сообщение</h2>
+    <form onsubmit="sendMessage(this);return false">
+      <div class="form-group">
+        <label>Кому</label>
+        <input class="input" type="text" id="composeTo" placeholder="Имя получателя" autocomplete="off" oninput="searchRecipient(this.value)">
+        <div id="recipientResults" style="position:absolute;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-sm);max-height:150px;overflow-y:auto;width:100%;display:none;z-index:10"></div>
+      </div>
+      <div class="form-group" style="position:relative">
+        <label>Тема</label>
+        <input class="input" type="text" id="composeSubject" placeholder="Тема сообщения">
+      </div>
+      <div class="form-group">
+        <label>Сообщение</label>
+        <textarea class="input" id="composeBody" rows="5" placeholder="Текст сообщения..."></textarea>
+      </div>
+      <div class="flex gap-2" style="margin-top:1rem;flex-wrap:wrap">
+        <button type="submit" class="btn btn-primary" id="composeSendBtn">✉ Отправить</button>
+        <button type="button" class="btn btn-ghost" onclick="modal.close('composeModal')">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="footerPlaceholder"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/components.js"></script>
+<script>
+  var currentTab = 'inbox';
+
+  function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.msg-tab').forEach(function (el) {
+      el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+    });
+    loadMessages();
+  }
+
+  async function loadMessages() {
+    var container = document.getElementById('msgContainer');
+    container.innerHTML = '<div class="empty-state">Загрузка...</div>';
+
+    try {
+      var endpoint = currentTab === 'inbox' ? '/api/messages/inbox' : '/api/messages/sent';
+      var msgs = await api.get(endpoint);
+      if (!msgs || msgs.length === 0) {
+        container.innerHTML = '<div class="empty-state">📭 Сообщений нет</div>';
+        return;
+      }
+
+      var h = '<div class="msg-list">';
+      for (var i = 0; i < msgs.length; i++) {
+        var m = msgs[i];
+        var name = currentTab === 'inbox' ? m.senderName : m.receiverName;
+        var isUnread = currentTab === 'inbox' && !m.isRead;
+        h += '<div class="msg-item' + (isUnread ? ' unread' : '') + '" onclick="openMessage(' + m.id + ')">';
+        h += '<img class="msg-avatar" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect fill=\'%235a5f44\' width=\'100\' height=\'100\'/%3E%3Ccircle fill=\'%23d4d9b0\' cx=\'50\' cy=\'35\' r=\'22\'/%3E%3Ctext x=\'50\' y=\'42\' text-anchor=\'middle\' font-size=\'14\' fill=\'%233d4030\' font-weight=\'bold\'%3E' + encodeURIComponent(name.charAt(0).toUpperCase()) + '%3C/text%3E%3C/svg%3E" alt="">';
+        h += '<div class="msg-body">';
+        h += '<div class="msg-header"><span class="msg-author">' + escapeHtml(name) + '</span><span class="msg-time">' + formatDate(m.createdAt) + '</span></div>';
+        h += '<div class="msg-subject">' + escapeHtml(m.subject || '(без темы)') + '</div>';
+        h += '<div class="msg-preview">' + escapeHtml((m.content || '').substring(0, 80)) + '</div>';
+        h += '</div></div>';
+      }
+      h += '</div>';
+      container.innerHTML = h;
+    } catch (_) {
+      container.innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
+    }
+  }
+
+  async function openMessage(msgId) {
+    var container = document.getElementById('msgContainer');
+    try {
+      var m = await api.get('/api/messages/' + msgId);
+      if (!m) { toast.error('Сообщение не найдено'); return; }
+
+      if (!m.isRead && currentTab === 'inbox') {
+        await api.put('/api/messages/' + msgId + '/read');
+      }
+
+      var partnerName = m.senderId === parseInt(api.getUserId()) ? m.receiverName : m.senderName;
+      var partnerId = m.senderId === parseInt(api.getUserId()) ? m.receiverId : m.senderId;
+      var direction = m.senderId === parseInt(api.getUserId()) ? '→ ' + m.receiverName : '← ' + m.senderName;
+
+      var h = '<div class="msg-detail">';
+      h += '<div class="msg-detail-header">';
+      h += '<div class="flex items-center justify-between" style="flex-wrap:wrap;gap:0.5rem">';
+      h += '<span style="font-weight:700;font-size:1rem">' + escapeHtml(m.subject || '(без темы)') + '</span>';
+      h += '<span class="text-xs text-tertiary">' + formatDate(m.createdAt) + '</span>';
+      h += '</div>';
+      h += '<div class="flex items-center gap-2" style="margin-top:0.3rem">';
+      h += '<span class="text-sm text-tertiary">' + escapeHtml(direction) + '</span>';
+      h += '<button class="btn btn-ghost btn-sm" style="font-size:0.72rem" onclick="showCompose(' + partnerId + ',\'' + partnerName.replace(/'/g, "\\'") + '\')">✉ Ответить</button>';
+      h += '<button class="btn btn-ghost btn-sm" style="font-size:0.72rem" onclick="loadMessages()">← Назад</button>';
+      h += '</div></div>';
+      h += '<div class="msg-detail-body">' + escapeHtml(m.content) + '</div>';
+      h += '</div>';
+      container.innerHTML = h;
+    } catch (_) {
+      toast.error('Ошибка загрузки сообщения');
+    }
+  }
+
+  function showCompose(replyToId, replyToName) {
+    document.getElementById('composeSubject').value = '';
+    document.getElementById('composeBody').value = '';
+    document.getElementById('recipientResults').style.display = 'none';
+
+    var toInput = document.getElementById('composeTo');
+    if (replyToName) {
+      toInput.value = replyToName;
+      toInput.dataset.replyToId = replyToId;
+    } else {
+      toInput.value = '';
+      delete toInput.dataset.replyToId;
+    }
+
+    modal.open('composeModal');
+  }
+
+  var searchTimer = null;
+
+  function searchRecipient(query) {
+    clearTimeout(searchTimer);
+    var results = document.getElementById('recipientResults');
+    query = query.trim();
+    if (!query) { results.style.display = 'none'; return; }
+
+    searchTimer = setTimeout(function () {
+      api.get('/api/users/search?q=' + encodeURIComponent(query)).then(function (users) {
+        if (!users || users.length === 0) {
+          results.style.display = 'none';
+          return;
+        }
+        results.style.display = 'block';
+        results.innerHTML = users.map(function (u) {
+          return '<div style="padding:0.4rem 0.6rem;cursor:pointer;font-size:0.82rem;border-bottom:1px solid var(--border-light)" onmouseenter="this.style.background=\'var(--bg-card-alt)\'" onmouseleave="this.style.background=\'\'" onclick="selectRecipient(' + u.id + ',\'' + u.username.replace(/'/g, "\\'") + '\')">' + escapeHtml(u.username) + ' <span class="text-xs text-tertiary">' + (u.rank || '') + '</span></div>';
+        }).join('');
+      }).catch(function () {});
+    }, 300);
+  }
+
+  function selectRecipient(id, name) {
+    document.getElementById('composeTo').value = name;
+    document.getElementById('composeTo').dataset.replyToId = id;
+    document.getElementById('recipientResults').style.display = 'none';
+  }
+
+  async function sendMessage(form) {
+    var toInput = document.getElementById('composeTo');
+    var subject = document.getElementById('composeSubject').value.trim();
+    var body = document.getElementById('composeBody').value.trim();
+
+    var receiverId = parseInt(toInput.dataset.replyToId || '0');
+    if (!receiverId) {
+      toast.warning('Найди получателя через поиск');
+      return;
+    }
+    if (!body) { toast.warning('Напиши сообщение'); return; }
+
+    var btn = document.getElementById('composeSendBtn');
+    btn.disabled = true;
+    try {
+      await api.post('/api/messages', {
+        receiverId: receiverId,
+        subject: subject || '(без темы)',
+        content: body
+      });
+      toast.success('Сообщение отправлено!');
+      modal.close('composeModal');
+      if (currentTab === 'sent') loadMessages();
+    } catch (_) {
+      btn.disabled = false;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!api.isLoggedIn()) { window.location.href = 'index.html'; return; }
+    loadMessages();
+    api.post('/api/users/heartbeat');
+    setInterval(function () { api.post('/api/users/heartbeat'); }, 120000);
+
+    var p = new URLSearchParams(window.location.search);
+    var to = p.get('to');
+    if (to) {
+      api.get('/api/users/search?q=' + encodeURIComponent(to)).then(function (users) {
+        if (users && users.length > 0) {
+          showCompose(users[0].id, users[0].username);
+        } else {
+          toast.error('Пользователь не найден');
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>

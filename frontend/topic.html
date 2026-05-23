@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Броня Крепка — Тема</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div id="headerPlaceholder"></div>
+
+<div class="page-layout">
+  <main class="main-content" id="topicContent"></main>
+</div>
+
+<div id="footerPlaceholder"></div>
+<div id="chatPlaceholder"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/components.js"></script>
+<script src="js/chat.js?v=2"></script>
+<script src="js/drafts.js"></script>
+<script>
+  var currentTopicId = null;
+  var currentTopic = null;
+  var currentPosts = [];
+
+  function buildAvatarHtml(username) {
+    if (!username) username = '?';
+    var letter = username.charAt(0).toUpperCase();
+    var colors = ['4e5669','7a8058','b8432f','a67c28','5a5f44','8a8e7a','9da370','6b5070','3d6b5e','8b5e3c'];
+    var hash = 0;
+    for (var i = 0; i < username.length; i++) { hash = username.charCodeAt(i) + ((hash << 5) - hash); }
+    var c = colors[Math.abs(hash) % colors.length];
+    var svg = '%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect fill=\'%23' + c + '\' width=\'100\' height=\'100\'/%3E%3Ccircle fill=\'%23d4d9b0\' cx=\'50\' cy=\'35\' r=\'22\'/%3E%3Ctext x=\'50\' y=\'42\' text-anchor=\'middle\' font-size=\'16\' fill=\'%233d4030\' font-weight=\'bold\'%3E' + encodeURIComponent(letter) + '%3C/text%3E%3C/svg%3E';
+    return 'data:image/svg+xml,' + svg;
+  }
+
+  function formatPostDate(dateStr) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr);
+    var now = new Date();
+    var diff = now - d;
+    var mins = Math.floor(diff / 60000);
+    var hours = Math.floor(diff / 3600000);
+    var days = Math.floor(diff / 86400000);
+    if (mins < 1) return 'только что';
+    if (mins < 60) return mins + ' мин назад';
+    if (hours < 24) return hours + ' ч назад';
+    if (days < 7) return days + ' дн назад';
+    return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function renderPost(p, isVent, isMe) {
+    var avatarUrl = p.avatar || buildAvatarHtml(p.username);
+    var borderStyle = isVent ? '1px dashed var(--fire-400);background:linear-gradient(135deg,var(--bg-card),rgba(180,60,40,0.03))' : 'border-left:3px solid var(--steel-300)';
+    var borderColor = isVent ? 'var(--fire-400)' : 'var(--border-color)';
+    var likeBtn = '';
+    if (api.isLoggedIn()) {
+      likeBtn = '<button class="btn btn-ghost btn-sm" onclick="likePost(' + p.id + ', this)" style="font-size:0.75rem">👍 <span class="like-count">' + (p.likeCount || 0) + '</span></button>';
+    } else {
+      likeBtn = '<span style="font-size:0.75rem;color:var(--text-tertiary)">👍 ' + (p.likeCount || 0) + '</span>';
+    }
+    var contentHtml = p.isBannedAuthor
+      ? '<div class="post-text" style="color:var(--text-tertiary);font-style:italic;padding:0.5rem;border:1px dashed var(--fire-400);border-radius:var(--radius-sm);background:rgba(180,60,40,0.03)">👮 Сообщение не доступно (пользователь в штрафбате)</div>'
+      : '<div class="post-text">' + p.content + '</div>';
+
+    return '<div class="post" style="' + borderStyle + '">' +
+      '<div class="post-sidebar">' +
+      '<div class="avatar-wrap" style="margin:0 auto">' +
+      '<img class="avatar avatar-lg"' + (isMe ? ' data-avatar="me"' : '') + ' src="' + avatarUrl + '" alt="' + escapeHtml(p.username) + '">' +
+      '<span class="online-dot"></span></div>' +
+      '<a href="profile.html?user=' + encodeURIComponent(p.username) + '" class="username" style="color:inherit;text-decoration:none">' + escapeHtml(p.username) + '</a>' +
+      '</div>' +
+      '<div class="post-body">' +
+      '<div class="post-header"><span>🕒 ' + formatPostDate(p.createdAt) + ' · №' + p.id + '</span></div>' +
+      contentHtml +
+      '<div class="post-footer" style="margin-top:0.5rem;display:flex;gap:0.5rem;align-items:center">' + likeBtn + '</div>' +
+      '</div>' +
+      '</div>';
+  }
+
+  async function likePost(postId, btn) {
+    try {
+      var res = await api.post('/api/posts/' + postId + '/like');
+      var countEl = btn.querySelector('.like-count');
+      if (countEl) {
+        var current = parseInt(countEl.textContent) || 0;
+        countEl.textContent = res.liked ? current + 1 : Math.max(0, current - 1);
+      }
+      btn.classList.toggle('liked');
+      toast.success(res.liked ? '👍 Респект!' : '👎 Респект убран');
+    } catch (_) {}
+  }
+
+  async function handleReply(form) {
+    var textarea = form.querySelector('[data-draft-field]');
+    var text = textarea.value.trim();
+    if (!text) { toast.warning('Напиши что-нибудь'); return; }
+    try {
+      await api.post('/api/posts', { topicId: currentTopicId, content: text });
+      textarea.value = '';
+      if (currentTopicId) {
+        localStorage.removeItem('tank-draft-reply-' + currentTopicId);
+      }
+      toast.success('Ответ отправлен!');
+      await loadTopic();
+    } catch (_) {}
+  }
+
+  async function loadTopic() {
+    var p = new URLSearchParams(window.location.search);
+    var id = p.get('id');
+    if (!id) { id = '1'; }
+    currentTopicId = parseInt(id);
+    var isVent = p.has('type');
+    var container = document.getElementById('topicContent');
+    container.innerHTML = '<div class="loading" style="text-align:center;padding:2rem;color:var(--text-tertiary)">Загрузка темы...</div>';
+
+    try {
+      var topic = await api.get('/api/topics/' + id);
+      if (!topic) { container.innerHTML = '<p>Тема не найдена. <a href="feed.html">← Назад</a></p>'; return; }
+      currentTopic = topic;
+
+      var posts = await api.get('/api/posts?topicId=' + id);
+      currentPosts = posts || [];
+
+      var titleDisplay = topic.title;
+      var tags = [];
+      if (topic.tags) {
+        tags = topic.tags.split(',').map(function (t) { return t.trim(); }).filter(function (t) { return t; });
+      }
+      function getTagClass(tag) {
+        var upper = tag.toUpperCase();
+        if (upper === 'ЗАКРЕП') return 'tag-gold';
+        if (upper === 'ГАЙД' || upper.indexOf('РЕПЛЕЙ') !== -1) return 'tag-steel';
+        if (upper === 'ХОТОВО' || upper.indexOf('НЫТЬЁ') !== -1 || upper.indexOf('ПОДДЕРЖКА') !== -1) return 'tag-fire';
+        return '';
+      }
+
+      var h = '<div class="breadcrumbs"><a href="feed.html">Форум</a> <span>/</span> <span>' + escapeHtml(titleDisplay.substring(0, 50)) + '…</span></div>';
+      h += '<h1 style="font-size:1.35rem;font-weight:800;margin-bottom:0.5rem' + (isVent ? ';color:var(--fire-500)' : '') + '">' + escapeHtml(titleDisplay) + '</h1>';
+
+      h += '<div class="flex items-center gap-2" style="margin-bottom:1rem;flex-wrap:wrap">';
+      for (var ti = 0; ti < tags.length; ti++) {
+        h += '<span class="tag' + (getTagClass(tags[ti]) ? ' ' + getTagClass(tags[ti]) : '') + '">' + escapeHtml(tags[ti]) + '</span>';
+      }
+      h += '<span class="text-sm text-tertiary">Автор: <strong>' + escapeHtml(topic.username) + '</strong> • ' + formatPostDate(topic.createdAt) + '</span>';
+      h += '<a href="feed.html" class="btn btn-ghost btn-sm" style="margin-left:auto">← К списку</a></div>';
+
+      for (var pi = 0; pi < posts.length; pi++) {
+        var isMe = api.isLoggedIn() && String(posts[pi].userId) === api.getUserId();
+        h += renderPost(posts[pi], isVent, isMe);
+      }
+
+      // Reply form
+      if (isVent) {
+        h += '<div class="reply-form" style="border-color:var(--fire-400)">' +
+          '<h3 style="font-size:1rem;margin-bottom:0.75rem;color:var(--fire-500)">💬 Поддержать бойца</h3>' +
+          '<form data-draft="reply-' + id + '" onsubmit="handleReply(this);return false">' +
+          '<textarea placeholder="Напиши слова поддержки... Без троллинга, пожалуйста" data-draft-field="text"></textarea>' +
+          '<div class="flex items-center justify-between" style="margin-top:0.5rem;flex-wrap:wrap;gap:0.5rem">' +
+          '<button class="btn btn-ghost btn-sm" type="button">😊 Стикер</button>' +
+          '<button class="btn btn-primary" type="submit" style="background:var(--fire-500)">💬 Поддержать</button></div>' +
+          '<div class="auto-save-indicator" data-draft-indicator></div></form></div>';
+      } else {
+        h += '<div class="reply-form">' +
+          '<h3 style="font-size:1rem;margin-bottom:0.75rem">✏ Написать ответ</h3>' +
+          '<form data-draft="reply-' + id + '" onsubmit="handleReply(this);return false">' +
+          '<textarea placeholder="Напиши своё мнение, братан..." data-draft-field="text"></textarea>' +
+          '<div class="flex items-center justify-between" style="margin-top:0.5rem;flex-wrap:wrap;gap:0.5rem">' +
+          '<div class="flex gap-2 items-center"><button class="btn btn-ghost btn-sm" type="button">📎 Вложение</button>' +
+          '<button class="btn btn-ghost btn-sm" type="button">😊 Стикер</button></div>' +
+          '<button class="btn btn-primary" type="submit">➡ Отправить</button></div>' +
+          '<div class="auto-save-indicator" data-draft-indicator>💾 Черновик сохраняется автоматически</div></form></div>';
+      }
+
+      container.innerHTML = h;
+      if (window.draftsInit) window.draftsInit();
+    } catch (e) {
+      if (currentTopic === null) {
+        container.innerHTML = '<p style="padding:2rem;text-align:center">Тема не найдена. <a href="feed.html">← Назад</a></p>';
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!api.isLoggedIn()) { window.location.href = 'index.html'; return; }
+    loadTopic();
+    api.post('/api/users/heartbeat');
+    setInterval(function () { api.post('/api/users/heartbeat'); }, 120000);
+  });
+</script>
+</body>
+</html>
