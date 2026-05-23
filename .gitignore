@@ -1,23 +1,102 @@
+# ============================
+# .NET / C#
+# ============================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstats
+*.userprefs
+*.csproj.user
+**/[Aa]ssemblyInfo.cs
+*.DotSettings
+*.DotSettings.user
+
+# ============================
+# Visual Studio
+# ============================
+.vs/
+*.cache
+*.log
+*.tmp
+
+# ============================
+# JetBrains Rider
+# ============================
+.idea/
+*.sln.iml
+
+# ============================
+# VS Code
+# ============================
+.vscode/
+
+# ============================
+# Build artifacts
+# ============================
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+packages/
+*.nupkg
+
+# ============================
+# Logs
+# ============================
+logs/
+
+# ============================
+# Application settings (secrets)
+# ============================
+appsettings.*.local.json
+appsettings.*.Development.local.json
+
+# ============================
+# Node / npm
+# ============================
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ============================
 # OS
+# ============================
 Thumbs.db
 .DS_Store
+*.DS_Store
 desktop.ini
+ehthumbs.db
+*.lnk
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Environment
-.env
-.env.local
-
-# Temp
+# ============================
+# Agent / Temp
+# ============================
+AgentsSettings/
 tmp/
 temp/
 *.tmp
+*.swp
+*.swo
+*~
 
-# Project-specific
-assets/icons/
-assets/images/
+# ============================
+# Environment
+# ============================
+.env
+.env.local
+.env.*.local
+
+# ============================
+# IDE / Editor misc
+# ============================
+*.bak
+*.orig
+*.sublime-project
+*.sublime-workspace
+
+# ============================
+# Frontend (generated assets)
+# ============================
+frontend/assets/icons/
+frontend/assets/images/
