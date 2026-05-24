@@ -11,4 +11,5 @@ public interface IUserService
     Task HeartbeatAsync(int userId);
     Task<List<UserDto>> GetOnlineAsync();
     Task<List<string>> GetUserClansAsync(int userId);
+    Task<GlobalStatsDto> GetGlobalStatsAsync();
 }

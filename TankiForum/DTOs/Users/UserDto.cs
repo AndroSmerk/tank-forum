@@ -15,8 +15,6 @@ public class UserDto
     public string? FavoriteTank { get; set; }
     public DateTime? LastActivityAt { get; set; }
     public int Respects { get; set; }
-    public string? Achievements { get; set; }
-    public string? Medals { get; set; }
     public string Role { get; set; } = string.Empty;
     public bool IsBanned { get; set; }
     public DateTime CreatedAt { get; set; }

@@ -65,17 +65,10 @@
           </div>
           <div class="username">Полковник_Медведь</div>
           <span class="rank-badge rank-colonel">★★★ Полковник</span>
-          <div class="medal-strip" style="justify-content:center;margin-top:0.3rem">
-            <span class="medal medal-gold">★</span>
-            <span class="medal medal-gold">★</span>
-            <span class="medal medal-silver">★</span>
-            <span class="medal medal-fire">♥</span>
-          </div>
           <div class="quote" id="displayQuote">«Броня крепка и танки наши быстры!»</div>
         </div>
 
         <div class="passport-info">
-          <div class="row"><span class="plabel">Звание</span><span class="pvalue" style="color:var(--rank-colonel)" id="displayRank">Полковник</span></div>
           <div class="row"><span class="plabel">Реальный полк</span><span class="pvalue" id="displayProfession">Менеджер по продажам</span></div>
           <div class="row"><span class="plabel">Возраст</span><span class="pvalue" id="displayAge">37 лет</span></div>
           <div class="row"><span class="plabel">Город</span><span class="pvalue" id="displayCity">Москва</span></div>
@@ -98,7 +91,6 @@
 
     <div class="flex gap-2" style="margin-top:1rem;flex-wrap:wrap">
       <button class="btn btn-primary" onclick="modal.open('editProfileModal')">✏ Редактировать профиль</button>
-      <button class="btn btn-ghost" onclick="modal.open('achievementsModal')">🏅 Достижения</button>
       <span id="otherUserActions" style="display:none;gap:0.5rem;flex-wrap:wrap">
         <button class="btn btn-ghost" onclick="sendMessageToUser()">✉ Написать</button>
         <button id="banBtn" class="btn btn-ghost" style="color:var(--fire-500)" onclick="shtrafbatUser()">⚠ Штрафбат</button>
@@ -106,37 +98,6 @@
       <button class="btn btn-ghost" onclick="window.location.href='index.html'" style="margin-left:auto;color:var(--text-tertiary)">🚪 Выйти</button>
     </div>
 
-    <div class="sidebar-widget" style="margin-top:1.5rem">
-      <div class="sidebar-widget-title">🏆 История наград</div>
-      <div class="hof-entry">
-        <span style="font-size:1.2rem">🥇</span>
-        <div style="flex:1">
-          <div class="hof-name">Танкист недели</div>
-          <div class="hof-reason">12 мая 2026 — 5 гайдов, 48 респектов</div>
-        </div>
-      </div>
-      <div class="hof-entry">
-        <span style="font-size:1.2rem">🥈</span>
-        <div style="flex:1">
-          <div class="hof-name">Танкист недели</div>
-          <div class="hof-reason">5 мая 2026 — помощь 12 новичкам</div>
-        </div>
-      </div>
-      <div class="hof-entry">
-        <span style="font-size:1.2rem">🏅</span>
-        <div style="flex:1">
-          <div class="hof-name">Орден «За заслуги»</div>
-          <div class="hof-reason">За 1000 качественных постов</div>
-        </div>
-      </div>
-      <div class="hof-entry">
-        <span style="font-size:1.2rem">🎖</span>
-        <div style="flex:1">
-          <div class="hof-name">Медаль «Спаситель»</div>
-          <div class="hof-reason">За спасение 5 тем от флуда</div>
-        </div>
-      </div>
-    </div>
   <!-- ===== МОДАЛКА: РЕДАКТИРОВАНИЕ ПРОФИЛЯ ===== -->
   <div class="modal-overlay" id="editProfileModal">
     <div class="modal" style="max-width:520px;position:relative">
@@ -149,8 +110,8 @@
           <span class="online-dot" style="width:16px;height:16px;border-width:3px"></span>
         </div>
         <div>
-          <p class="text-sm fw-600">Полковник_Медведь</p>
-          <p class="text-xs text-tertiary">Звание: Полковник</p>
+          <p class="text-sm fw-600" id="editUsername">Полковник_Медведь</p>
+          <p class="text-xs text-tertiary" id="editRank">Звание: Полковник</p>
           <button class="btn btn-ghost btn-sm" id="avatarUploadBtn" style="margin-top:4px">🖼 Сменить аватар</button>
         </div>
       </div>
@@ -203,195 +164,10 @@
     </div>
   </div>
 
-  <!-- ===== МОДАЛКА: ВСЕ ДОСТИЖЕНИЯ ===== -->
-  <div class="modal-overlay" id="achievementsModal">
-    <div class="modal" style="max-width:580px;position:relative">
-      <button class="modal-close" onclick="modal.close('achievementsModal')">✕</button>
-      <h2>🏅 Все достижения <span class="text-sm text-tertiary">(12 из 24)</span></h2>
-
-      <div class="achievement-item">
-        <div class="ach-icon">💬</div>
-        <div class="ach-info">
-          <div class="ach-name">Болтун</div>
-          <div class="ach-desc">50 постов</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:100%"></div></div></div>
-        <span class="ach-progress" style="font-size:0.72rem">✅</span>
-      </div>
-      <div class="achievement-item">
-        <div class="ach-icon">💬</div>
-        <div class="ach-info">
-          <div class="ach-name">100 постов</div>
-          <div class="ach-desc">Напиши 100 сообщений</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:82%"></div></div></div>
-        <span class="ach-progress">82%</span>
-      </div>
-      <div class="achievement-item">
-        <div class="ach-icon">🎓</div>
-        <div class="ach-info">
-          <div class="ach-name">Наставник</div>
-          <div class="ach-desc">Помоги 10 новичкам</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:40%"></div></div></div>
-        <span class="ach-progress">4/10</span>
-      </div>
-      <div class="achievement-item">
-        <div class="ach-icon">🛡</div>
-        <div class="ach-info">
-          <div class="ach-name">Хранитель порядка</div>
-          <div class="ach-desc">Спаси тему от флуда</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
-        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
-      </div>
-      <div class="achievement-item">
-        <div class="ach-icon">🎯</div>
-        <div class="ach-info">
-          <div class="ach-name">Снайпер</div>
-          <div class="ach-desc">5 реплеев с 7+ убийствами</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
-        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
-      </div>
-      <div class="achievement-item">
-        <div class="ach-icon">📸</div>
-        <div class="ach-info">
-          <div class="ach-name">Репортёр</div>
-          <div class="ach-desc">Загрузи 10 скриншотов</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:60%"></div></div></div>
-        <span class="ach-progress">6/10</span>
-      </div>
-      <div class="achievement-item">
-        <div class="ach-icon">❤️</div>
-        <div class="ach-info">
-          <div class="ach-name">Душа компании</div>
-          <div class="ach-desc">Получи 50 респектов</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:94%"></div></div></div>
-        <span class="ach-progress">47/50</span>
-      </div>
-      <div class="achievement-item">
-        <div class="ach-icon">⭐</div>
-        <div class="ach-info">
-          <div class="ach-name">Ветеран</div>
-          <div class="ach-desc">Быть на форуме больше года</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:100%"></div></div></div>
-        <span class="ach-progress" style="font-size:0.72rem">✅</span>
-      </div>
-      <div class="achievement-item locked">
-        <div class="ach-icon">🔥</div>
-        <div class="ach-info">
-          <div class="ach-name">Танкист недели</div>
-          <div class="ach-desc">Стать танкистом недели 3 раза</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:66%"></div></div></div>
-        <span class="ach-progress">2/3</span>
-      </div>
-      <div class="achievement-item locked">
-        <div class="ach-icon">👑</div>
-        <div class="ach-info">
-          <div class="ach-name">Генерал форума</div>
-          <div class="ach-desc">Достигни высшего звания</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
-        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
-      </div>
-      <div class="achievement-item locked">
-        <div class="ach-icon">🎮</div>
-        <div class="ach-info">
-          <div class="ach-name">Гайд-мейкер</div>
-          <div class="ach-desc">Создай 10 гайдов</div>
-        </div>
-        <div style="width:80px"><div class="progress-bar"><div class="progress-bar-fill" style="width:0%"></div></div></div>
-        <span class="ach-progress" style="color:var(--text-tertiary)">🔒</span>
-      </div>
-      </div>
-    </div>
-  </div>
-
   </main>
 
   <!-- Сайдбар профиля -->
   <aside class="sidebar">
-
-    <!-- Достижения -->
-    <div class="sidebar-widget">
-      <div class="sidebar-widget-title">🏅 Достижения (12/24)</div>
-      <div class="achievement-item">
-        <div class="ach-icon">💬</div>
-        <div class="ach-info">
-          <div class="ach-name">100 постов</div>
-          <div class="ach-desc">Напиши 100 сообщений</div>
-        </div>
-        <span class="ach-progress">82%</span>
-      </div>
-      <div class="achievement-item">
-        <div class="ach-icon">🎓</div>
-        <div class="ach-info">
-          <div class="ach-name">Наставник</div>
-          <div class="ach-desc">Помоги 10 новичкам</div>
-        </div>
-        <span class="ach-progress">40%</span>
-      </div>
-      <div class="achievement-item locked">
-        <div class="ach-icon">🛡</div>
-        <div class="ach-info">
-          <div class="ach-name">Хранитель порядка</div>
-          <div class="ach-desc">Спаси тему от флуда</div>
-        </div>
-        <span class="ach-progress">🔒</span>
-      </div>
-      <div class="achievement-item locked">
-        <div class="ach-icon">🎯</div>
-        <div class="ach-info">
-          <div class="ach-name">Снайпер</div>
-          <div class="ach-desc">5 реплеев с 7+ убийствами</div>
-        </div>
-        <span class="ach-progress">🔒</span>
-      </div>
-      <button class="btn btn-ghost btn-sm w-full" style="margin-top:6px" onclick="modal.open('achievementsModal')">🏅 Все достижения (12/24)</button>
-    </div>
-
-    <!-- Боевой путь -->
-    <div class="sidebar-widget">
-      <div class="sidebar-widget-title">📜 Боевой путь</div>
-      <div style="font-size:0.82rem">
-        <p style="padding:0.4rem 0;border-bottom:1px solid var(--border-light)">
-          <strong>🎯</strong> Разбор реплея: Prokhorovka<br>
-          <span class="text-xs text-tertiary">Тактический полигон · сегодня, 14:23</span>
-          <span style="float:right;color:var(--olive-600)">+24 ↑</span>
-        </p>
-        <p style="padding:0.4rem 0;border-bottom:1px solid var(--border-light)">
-          <strong>💬</strong> Re: Патч 1.26 — кто чего накопил?<br>
-          <span class="text-xs text-tertiary">Ламповая броня · вчера, 21:45</span>
-          <span style="float:right;color:var(--olive-600)">+12 ↑</span>
-        </p>
-        <p style="padding:0.4rem 0">
-          <strong>👍</strong> Поставил респект Serg_76<br>
-          <span class="text-xs text-tertiary">сегодня, 15:10</span>
-        </p>
-      </div>
-    </div>
-
-    <!-- Настройки -->
-    <div class="sidebar-widget">
-      <div class="sidebar-widget-title">⚙ Настройки</div>
-      <div style="font-size:0.85rem">
-        <label class="form-checkbox" style="padding:0.4rem 0;cursor:pointer">
-          <input type="checkbox" id="setting-notify" checked> Уведомления о новых ответах
-        </label>
-        <label class="form-checkbox" style="padding:0.4rem 0;cursor:pointer">
-          <input type="checkbox" id="setting-replays" checked> Подписка на реплеи
-        </label>
-        <label class="form-checkbox" style="padding:0.4rem 0;cursor:pointer">
-          <input type="checkbox" id="setting-theme" checked> Тёмная тема «Броня на ночь»
-        </label>
-      </div>
-      <button class="btn btn-ghost btn-sm w-full" style="margin-top:8px" onclick="toast.show('Смена пароля будет доступна после подключения backend','info')">🔑 Сменить пароль</button>
-    </div>
   </aside>
 </div>
 
@@ -407,7 +183,6 @@
 <script src="js/components.js"></script>
 <script src="js/chat.js?v=2"></script>
 <script>
-  var SETTINGS_KEY = 'tank-settings';
   var currentUserId = null;
   var isOwnProfile = true;
 
@@ -523,7 +298,6 @@
     var age = user.age ? user.age + ' лет' : '';
     var favoriteTank = user.favoriteTank || '';
     var respects = user.respects || 0;
-    var medals = user.medals || '';
     var createdAt = user.createdAt || '';
     var avatar = user.avatar || '';
 
@@ -554,20 +328,11 @@
     var tankEl = document.getElementById('displayTank');
     if (tankEl) tankEl.textContent = favoriteTank;
 
-    var respectsEl = document.querySelector('.passport-info .row:last-child .pvalue');
-    if (respectsEl) respectsEl.textContent = respects + ' \uD83D\uDC4D';
+    var respectsEl = document.getElementById('displayRespects');
+    if (respectsEl) respectsEl.textContent = respects;
 
     var createdEl = document.querySelector('.passport-info .row:nth-child(5) .pvalue');
     if (createdEl) createdEl.textContent = formatProfileDate(createdAt);
-
-    var medalStrip = document.querySelector('.medal-strip');
-    if (medalStrip && medals) {
-      var medalMap = { gold: 'medal-gold', silver: 'medal-silver', fire: 'medal-fire' };
-      medalStrip.innerHTML = medals.split(',').map(function (c) {
-        var cls = medalMap[c.trim()] || '';
-        return '<span class="medal ' + cls + '">' + (c.trim() === 'fire' ? '\u2665' : '\u2605') + '</span>';
-      }).join('');
-    }
 
     // Avatar
     if (avatar && isOwn) {
@@ -582,6 +347,10 @@
     }
 
     // Edit form
+    var editUsername = document.getElementById('editUsername');
+    if (editUsername) editUsername.textContent = displayName;
+    var editRank = document.getElementById('editRank');
+    if (editRank) editRank.textContent = 'Звание: ' + rank;
     var editQuote = document.getElementById('editQuote');
     if (editQuote) editQuote.value = quote;
     var editProf = document.getElementById('editProfession');
@@ -681,37 +450,10 @@
     } catch (_) {}
   }
 
-  function saveSettings() {
-    var data = {
-      notify: document.getElementById('setting-notify').checked,
-      replays: document.getElementById('setting-replays').checked,
-      theme: document.getElementById('setting-theme').checked
-    };
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
-    toast.success('Настройки сохранены');
-  }
-
-  function loadSettings() {
-    var raw = localStorage.getItem(SETTINGS_KEY);
-    if (!raw) return;
-    var data = JSON.parse(raw);
-    var el = document.getElementById('setting-notify');
-    if (el) el.checked = data.notify !== false;
-    el = document.getElementById('setting-replays');
-    if (el) el.checked = data.replays !== false;
-    el = document.getElementById('setting-theme');
-    if (el) el.checked = data.theme !== false;
-  }
-
   document.addEventListener('DOMContentLoaded', function () {
-    loadSettings();
     loadProfilePage();
     api.post('/api/users/heartbeat');
     setInterval(function () { api.post('/api/users/heartbeat'); }, 120000);
-
-    document.querySelectorAll('#setting-notify, #setting-replays, #setting-theme').forEach(function (cb) {
-      cb.addEventListener('change', saveSettings);
-    });
   });
 
   // Logout

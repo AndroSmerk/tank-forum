@@ -36,8 +36,6 @@ public class UserService : IUserService
             FavoriteTank = user.FavoriteTank,
             LastActivityAt = user.LastActivityAt,
             Respects = user.Respects,
-            Achievements = user.Achievements,
-            Medals = user.Medals,
             Role = user.Role,
             IsBanned = user.IsBanned,
             CreatedAt = user.CreatedAt
@@ -95,8 +93,6 @@ public class UserService : IUserService
                 FavoriteTank = u.FavoriteTank,
                 LastActivityAt = u.LastActivityAt,
                 Respects = u.Respects,
-                Achievements = u.Achievements,
-                Medals = u.Medals,
                 Role = u.Role,
                 CreatedAt = u.CreatedAt
             })
@@ -134,8 +130,6 @@ public class UserService : IUserService
                 Quote = u.Quote,
                 FavoriteTank = u.FavoriteTank,
                 Respects = u.Respects,
-                Achievements = u.Achievements,
-                Medals = u.Medals,
                 Role = u.Role,
                 CreatedAt = u.CreatedAt
             })
@@ -193,10 +187,26 @@ public class UserService : IUserService
             Quote = user.Quote,
             FavoriteTank = user.FavoriteTank,
             Respects = user.Respects,
-            Achievements = user.Achievements,
-            Medals = user.Medals,
             Role = user.Role,
             CreatedAt = user.CreatedAt
+        };
+    }
+
+    public async Task<GlobalStatsDto> GetGlobalStatsAsync()
+    {
+        var userCount = await _context.Users.CountAsync();
+        var topicCount = await _context.Topics.CountAsync();
+        var postCount = await _context.Posts.CountAsync();
+        var onlineCount = await _context.Users
+            .Where(u => u.LastActivityAt.HasValue && u.LastActivityAt > DateTime.UtcNow.AddMinutes(-5))
+            .CountAsync();
+
+        return new GlobalStatsDto
+        {
+            UserCount = userCount,
+            TopicCount = topicCount,
+            PostCount = postCount,
+            OnlineCount = onlineCount
         };
     }
 }

@@ -66,6 +66,13 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("stats/global")]
+    public async Task<IActionResult> GetGlobalStats()
+    {
+        var stats = await _userService.GetGlobalStatsAsync();
+        return Ok(stats);
+    }
+
     [HttpGet("online")]
     public async Task<IActionResult> GetOnline()
     {

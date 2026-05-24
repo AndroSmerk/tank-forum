@@ -3,6 +3,7 @@ using TankiForum.Data;
 using TankiForum.DTOs.Clans;
 using TankiForum.Models;
 using TankiForum.Services.Interfaces;
+using Npgsql;
 
 namespace TankiForum.Services;
 
@@ -103,7 +104,14 @@ public class ClanService : IClanService
         };
 
         _context.UserClans.Add(userClan);
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
+        {
+            return false;
+        }
         return true;
     }
 
@@ -118,4 +126,5 @@ public class ClanService : IClanService
         await _context.SaveChangesAsync();
         return true;
     }
+
 }
