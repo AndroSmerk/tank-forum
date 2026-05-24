@@ -24,4 +24,10 @@ public class CreateTopicRequest
     /// </summary>
     [Required, MaxLength(10000)]
     public string Content { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Comma-separated tags (optional).
+    /// </summary>
+    [MaxLength(500)]
+    public string? Tags { get; set; }
 }

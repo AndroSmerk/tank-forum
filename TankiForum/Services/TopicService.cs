@@ -106,7 +106,8 @@ public class TopicService : ITopicService
         {
             SectionId = request.SectionId,
             UserId = userId,
-            Title = request.Title
+            Title = request.Title,
+            Tags = request.Tags
         };
 
         var post = new Post
@@ -149,6 +150,7 @@ public class TopicService : ITopicService
             throw new UnauthorizedAccessException("You can only edit your own topics.");
 
         topic.Title = request.Title;
+        topic.Tags = request.Tags;
         topic.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
@@ -161,6 +163,7 @@ public class TopicService : ITopicService
             Username = topic.User.Username,
             Avatar = topic.User.Avatar,
             Title = topic.Title,
+            Tags = topic.Tags,
             CreatedAt = topic.CreatedAt,
             UpdatedAt = topic.UpdatedAt
         };

@@ -12,4 +12,10 @@ public class UpdateTopicRequest
     /// </summary>
     [Required, MinLength(1), MaxLength(200)]
     public string Title { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Comma-separated tags (optional).
+    /// </summary>
+    [MaxLength(500)]
+    public string? Tags { get; set; }
 }

@@ -27,7 +27,7 @@
     <div class="flex items-center justify-between" style="margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem">
       <div>
         <h1 style="font-size:1.3rem">Лента подразделения</h1>
-        <span class="text-sm text-tertiary">4 283 бойца в строю · 312 онлайн</span>
+        <span class="text-sm text-tertiary" id="headerStats"><span id="statUsersHeader">0</span> бойца в строю · <span id="statOnlineHeader">0</span> онлайн</span>
       </div>
       <a href="new-topic.html" class="btn btn-fire">➕ Новая тема</a>
     </div>
@@ -48,33 +48,6 @@
   <!-- ===== САЙДБАР ===== -->
   <aside class="sidebar">
 
-    <!-- Зал Боевой Славы -->
-    <div class="sidebar-widget">
-      <div class="sidebar-widget-title">🏆 Зал Боевой Славы</div>
-      <div class="hof-entry">
-        <span style="font-size:1.2rem">🥇</span>
-        <div style="flex:1">
-          <div class="hof-name">Полковник_Медведь</div>
-          <div class="hof-reason">5 гайдов, 48 респектов</div>
-        </div>
-        <span class="tag tag-gold">недели</span>
-      </div>
-      <div class="hof-entry">
-        <span style="font-size:1.2rem">🥈</span>
-        <div style="flex:1">
-          <div class="hof-name">Tankist_1979</div>
-          <div class="hof-reason">Помощь 12 новичкам</div>
-        </div>
-      </div>
-      <div class="hof-entry">
-        <span style="font-size:1.2rem">🥉</span>
-        <div style="flex:1">
-          <div class="hof-name">Serega_Na_Objekte</div>
-          <div class="hof-reason">Спас тему от срача</div>
-        </div>
-      </div>
-    </div>
-
     <!-- Кто онлайн -->
     <div class="sidebar-widget">
       <div class="sidebar-widget-title">🔋 За штурвалом <span class="text-xs text-tertiary" id="onlineCountHeader">(0)</span></div>
@@ -86,39 +59,10 @@
     <div class="sidebar-widget">
       <div class="sidebar-widget-title">📊 Статистика подразделения</div>
       <div class="sidebar-stats">
-        <div class="sidebar-stat"><div class="num">4 283</div><div class="label">Бойцов</div></div>
-        <div class="sidebar-stat"><div class="num">312</div><div class="label">Онлайн</div></div>
-        <div class="sidebar-stat"><div class="num">12 847</div><div class="label">Тем</div></div>
-        <div class="sidebar-stat"><div class="num">143K</div><div class="label">Постов</div></div>
-      </div>
-    </div>
-
-    <!-- Достижения -->
-    <div class="sidebar-widget">
-      <div class="sidebar-widget-title">🏅 Твои достижения</div>
-      <div class="achievement-item">
-        <div class="ach-icon">💬</div>
-        <div class="ach-info">
-          <div class="ach-name">100 постов</div>
-          <div class="ach-desc">Напиши 100 сообщений</div>
-        </div>
-        <span class="ach-progress">82/100</span>
-      </div>
-      <div class="achievement-item">
-        <div class="ach-icon">🎓</div>
-        <div class="ach-info">
-          <div class="ach-name">Наставник</div>
-          <div class="ach-desc">Помоги 10 новичкам</div>
-        </div>
-        <span class="ach-progress">4/10</span>
-      </div>
-      <div class="achievement-item locked">
-        <div class="ach-icon">🛡</div>
-        <div class="ach-info">
-          <div class="ach-name">Хранитель порядка</div>
-          <div class="ach-desc">Спаси тему от флуда</div>
-        </div>
-        <span class="ach-progress">🔒</span>
+        <div class="sidebar-stat"><div class="num" id="statUsers">0</div><div class="label">Бойцов</div></div>
+        <div class="sidebar-stat"><div class="num" id="statOnline">0</div><div class="label">Онлайн</div></div>
+        <div class="sidebar-stat"><div class="num" id="statTopics">0</div><div class="label">Тем</div></div>
+        <div class="sidebar-stat"><div class="num" id="statPosts">0</div><div class="label">Постов</div></div>
       </div>
     </div>
 
@@ -395,9 +339,9 @@
   async function leaveClan(clanId, clanName) {
     try {
       await api.post('/api/clans/leave', { clanId: clanId });
-      toast.info('Покинул "' + clanName + '"');
-      loadClans();
+      toast.success('Покинул "' + clanName + '"');
     } catch (_) {}
+    loadClans();
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -439,6 +383,7 @@
     loadCategories().then(function () { loadTopics(); });
     loadClans();
     loadOnlineUsers();
+    loadGlobalStats();
 
     // Heartbeat
     api.post('/api/users/heartbeat');
@@ -470,6 +415,19 @@
 
       if (countEl) countEl.textContent = '(' + users.length + ')';
       sidebar.innerHTML = users.slice(0, 5).map(renderOnlineUser).join('');
+    } catch (_) {}
+  }
+
+  async function loadGlobalStats() {
+    try {
+      var stats = await api.get('/api/users/stats/global');
+      if (!stats) return;
+      document.getElementById('statUsers').textContent = (stats.userCount || 0).toLocaleString();
+      document.getElementById('statUsersHeader').textContent = (stats.userCount || 0).toLocaleString();
+      document.getElementById('statOnline').textContent = (stats.onlineCount || 0).toLocaleString();
+      document.getElementById('statOnlineHeader').textContent = (stats.onlineCount || 0).toLocaleString();
+      document.getElementById('statTopics').textContent = (stats.topicCount || 0).toLocaleString();
+      document.getElementById('statPosts').textContent = (stats.postCount || 0).toLocaleString();
     } catch (_) {}
   }
 

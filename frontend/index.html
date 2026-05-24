@@ -105,38 +105,6 @@
         </button>
       </form>
 
-      <div class="auth-links">
-        <p style="margin-top:1rem;font-size:0.85rem"><a href="#" id="showRecovery">Забыл пароль?</a></p>
-      </div>
-    </div>
-
-    <!-- Форма восстановления пароля -->
-    <div id="formRecovery" style="display:none">
-      <h2 style="font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:0.3rem">Восстановление пароля</h2>
-      <p class="auth-sub">Введи email, пришлём ссылку на сброс</p>
-
-      <form id="recoveryForm">
-        <div class="form-group">
-          <label for="recoveryEmail">Email</label>
-          <input class="input" type="email" id="recoveryEmail" placeholder="tankist@mail.ru" autocomplete="email">
-        </div>
-
-        <button type="submit" class="btn btn-primary w-full" style="justify-content:center;padding:0.7rem;font-size:1rem" id="recoveryBtn">
-          📨 Отправить ссылку
-        </button>
-      </form>
-
-      <div class="auth-links">
-        <p style="margin-top:1rem;font-size:0.85rem"><a href="#" id="backToLoginFromRecovery">← Назад ко входу</a></p>
-      </div>
-    </div>
-
-    <!-- Успех восстановления -->
-    <div id="formRecoveryDone" style="display:none;text-align:center;padding:1.5rem 0">
-      <div style="font-size:3rem;margin-bottom:0.75rem">📨</div>
-      <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:0.3rem">Письмо отправлено!</h2>
-      <p class="auth-sub">Проверь почту — там ссылка для сброса пароля</p>
-      <button class="btn btn-ghost" style="margin-top:1rem" onclick="showLogin()">← Понял, вернуться ко входу</button>
     </div>
 
     <!-- Форма регистрации -->
@@ -201,17 +169,11 @@
   var tabRegister = document.getElementById('tabRegister');
   var formLogin = document.getElementById('formLogin');
   var formRegister = document.getElementById('formRegister');
-  var formRecovery = document.getElementById('formRecovery');
-  var formRecoveryDone = document.getElementById('formRecoveryDone');
   var tabsContainer = document.querySelector('.auth-card > div:first-child');
-  var showRecovery = document.getElementById('showRecovery');
-  var backToLoginFromRecovery = document.getElementById('backToLoginFromRecovery');
 
   function hideAllForms() {
     formLogin.style.display = 'none';
     formRegister.style.display = 'none';
-    formRecovery.style.display = 'none';
-    formRecoveryDone.style.display = 'none';
   }
 
   function showLogin() {
@@ -241,30 +203,6 @@
     tabLogin.style.color = 'var(--text-tertiary)';
     tabLogin.style.fontWeight = '500';
   }
-
-  function showRecoveryForm() {
-    hideAllForms();
-    formRecovery.style.display = '';
-    document.getElementById('recoveryEmail').value = '';
-    if (tabsContainer) tabsContainer.style.display = 'none';
-  }
-
-  document.getElementById('recoveryForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    var email = document.getElementById('recoveryEmail').value.trim();
-    if (!email) { toast.warning('Введи email'); return; }
-    var btn = document.getElementById('recoveryBtn');
-    btn.disabled = true;
-    try {
-      var res = await api.post('/api/auth/forgot-password', { email: email });
-      toast.info(res.message || 'Если email зарегистрирован, инструкции отправлены.');
-      hideAllForms();
-      formRecoveryDone.style.display = '';
-      if (tabsContainer) tabsContainer.style.display = 'none';
-    } catch (_) {
-      btn.disabled = false;
-    }
-  });
 
   // Login form
   document.getElementById('loginForm').addEventListener('submit', async function (e) {
@@ -342,8 +280,6 @@
 
   tabLogin.addEventListener('click', showLogin);
   tabRegister.addEventListener('click', showRegister);
-  if (showRecovery) showRecovery.addEventListener('click', function(e) { e.preventDefault(); showRecoveryForm(); });
-  if (backToLoginFromRecovery) backToLoginFromRecovery.addEventListener('click', function(e) { e.preventDefault(); showLogin(); });
 </script>
 </body>
 </html>

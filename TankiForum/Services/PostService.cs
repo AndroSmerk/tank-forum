@@ -135,8 +135,11 @@ public class PostService : IPostService
         if (user is null) return false;
         if (user.IsBanned) return false;
 
-        var postExists = await _context.Posts.AnyAsync(p => p.Id == postId);
-        if (!postExists) return false;
+        var post = await _context.Posts.FindAsync(postId);
+        if (post is null) return false;
+
+        var postAuthor = await _context.Users.FindAsync(post.UserId);
+        if (postAuthor is null) return false;
 
         var existingLike = await _context.PostLikes
             .FirstOrDefaultAsync(pl => pl.PostId == postId && pl.UserId == userId);
@@ -144,6 +147,7 @@ public class PostService : IPostService
         if (existingLike is not null)
         {
             _context.PostLikes.Remove(existingLike);
+            if (postAuthor.Respects > 0) postAuthor.Respects--;
             await _context.SaveChangesAsync();
             return false;
         }
@@ -154,6 +158,7 @@ public class PostService : IPostService
             UserId = userId
         });
 
+        postAuthor.Respects++;
         await _context.SaveChangesAsync();
         return true;
     }

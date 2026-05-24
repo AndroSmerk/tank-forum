@@ -250,7 +250,7 @@
       });
       toast.success('Сообщение отправлено!');
       modal.close('composeModal');
-      if (currentTab === 'sent') loadMessages();
+      window.location.href = 'messages.html';
     } catch (_) {
       btn.disabled = false;
     }
