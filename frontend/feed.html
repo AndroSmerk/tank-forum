@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Броня Крепка — Лента подразделения</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div id="headerPlaceholder"></div>
+
+<div class="page-layout">
+
+  <main class="main-content">
+
+    <div class="breadcrumbs">
+      <a href="feed.html">Форум</a>
+      <span>•</span>
+      <span>Лента тем</span>
+    </div>
+
+    <div class="flex items-center justify-between" style="margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem">
+      <div>
+        <h1 style="font-size:1.3rem">Лента подразделения</h1>
+        <span class="text-sm text-tertiary">4 283 бойца в строю · 312 онлайн</span>
+      </div>
+      <a href="new-topic.html" class="btn btn-fire">➕ Новая тема</a>
+    </div>
+
+    <div class="tabs" id="filterTabs">
+      <button class="tab active" data-filter="all">Все темы</button>
+      <button class="tab" data-filter="vent" style="color:var(--fire-500)">💥 Склад нытья</button>
+    </div>
+
+    <div id="topicsContainer">
+      <div class="loading" style="text-align:center;padding:2rem;color:var(--text-tertiary)">Загрузка тем...</div>
+    </div>
+
+    <!-- Пагинация -->
+    <div class="pagination" id="pagination"></div>
+  </main>
+
+  <!-- ===== САЙДБАР ===== -->
+  <aside class="sidebar">
+
+    <!-- Зал Боевой Славы -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">🏆 Зал Боевой Славы</div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🥇</span>
+        <div style="flex:1">
+          <div class="hof-name">Полковник_Медведь</div>
+          <div class="hof-reason">5 гайдов, 48 респектов</div>
+        </div>
+        <span class="tag tag-gold">недели</span>
+      </div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🥈</span>
+        <div style="flex:1">
+          <div class="hof-name">Tankist_1979</div>
+          <div class="hof-reason">Помощь 12 новичкам</div>
+        </div>
+      </div>
+      <div class="hof-entry">
+        <span style="font-size:1.2rem">🥉</span>
+        <div style="flex:1">
+          <div class="hof-name">Serega_Na_Objekte</div>
+          <div class="hof-reason">Спас тему от срача</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Кто онлайн -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">🔋 За штурвалом <span class="text-xs text-tertiary" id="onlineCountHeader">(0)</span></div>
+      <div id="onlineListSidebar"></div>
+      <button class="btn btn-ghost btn-sm w-full" style="margin-top:6px" onclick="loadOnlineModal()">👥 Все онлайн</button>
+    </div>
+
+    <!-- Статистика -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">📊 Статистика подразделения</div>
+      <div class="sidebar-stats">
+        <div class="sidebar-stat"><div class="num">4 283</div><div class="label">Бойцов</div></div>
+        <div class="sidebar-stat"><div class="num">312</div><div class="label">Онлайн</div></div>
+        <div class="sidebar-stat"><div class="num">12 847</div><div class="label">Тем</div></div>
+        <div class="sidebar-stat"><div class="num">143K</div><div class="label">Постов</div></div>
+      </div>
+    </div>
+
+    <!-- Достижения -->
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">🏅 Твои достижения</div>
+      <div class="achievement-item">
+        <div class="ach-icon">💬</div>
+        <div class="ach-info">
+          <div class="ach-name">100 постов</div>
+          <div class="ach-desc">Напиши 100 сообщений</div>
+        </div>
+        <span class="ach-progress">82/100</span>
+      </div>
+      <div class="achievement-item">
+        <div class="ach-icon">🎓</div>
+        <div class="ach-info">
+          <div class="ach-name">Наставник</div>
+          <div class="ach-desc">Помоги 10 новичкам</div>
+        </div>
+        <span class="ach-progress">4/10</span>
+      </div>
+      <div class="achievement-item locked">
+        <div class="ach-icon">🛡</div>
+        <div class="ach-info">
+          <div class="ach-name">Хранитель порядка</div>
+          <div class="ach-desc">Спаси тему от флуда</div>
+        </div>
+        <span class="ach-progress">🔒</span>
+      </div>
+    </div>
+
+    <!-- Кланы -->
+    <div class="sidebar-widget" id="clansWidget">
+      <div class="sidebar-widget-title">🏰 Клубы по интересам</div>
+      <div id="clansList"><div class="text-sm text-tertiary" style="padding:0.5rem">Загрузка...</div></div>
+      <div class="flex gap-2" style="margin-top:0.5rem;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" style="flex:1;font-size:0.72rem" onclick="showCreateClan()">➕ Создать</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="createClanModal">
+      <div class="modal" style="max-width:400px;position:relative">
+        <button class="modal-close" onclick="modal.close('createClanModal')">✕</button>
+        <h2>🏰 Создать клуб</h2>
+        <form onsubmit="createClan(this);return false">
+          <div class="form-group">
+            <label>Название клуба</label>
+            <input class="input" id="clanName" placeholder="Название" required>
+          </div>
+          <div class="form-group">
+            <label>Описание</label>
+            <textarea class="input" id="clanDesc" rows="3" placeholder="Опишите ваш клуб"></textarea>
+          </div>
+          <div class="flex gap-2" style="margin-top:1rem">
+            <button type="submit" class="btn btn-primary">🏰 Создать</button>
+            <button type="button" class="btn btn-ghost" onclick="modal.close('createClanModal')">Отмена</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ===== МОДАЛКА: ВСЕ ОНЛАЙН ===== -->
+<div class="modal-overlay" id="onlineModal">
+  <div class="modal" style="max-width:460px;position:relative">
+    <button class="modal-close" onclick="modal.close('onlineModal')">✕</button>
+    <h2>🔋 За штурвалом <span class="text-sm text-tertiary" id="onlineModalCount">(0)</span></h2>
+
+    <div style="margin-bottom:0.75rem">
+      <input class="input" type="text" placeholder="Поиск по позывному..." id="onlineSearch" oninput="filterOnline(this.value)">
+    </div>
+
+    <div id="onlineList" style="max-height:400px;overflow-y:auto"></div>
+  </div>
+</div>
+
+<div id="footerPlaceholder"></div>
+<div id="chatPlaceholder"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/components.js"></script>
+<script src="js/chat.js?v=2"></script>
+<script>
+  var currentFilter = 'all';
+  var currentSearch = '';
+  var currentPage = 1;
+  var categoriesMap = {};
+  var sectionsByCategory = {};
+
+  function buildAvatarHtml(username) {
+    var letter = (username && username.length > 0) ? username.charAt(0).toUpperCase() : '?';
+    var colors = ['4e5669','7a8058','b8432f','a67c28','5a5f44','8a8e7a','9da370','6b5070','3d6b5e','8b5e3c'];
+    var hash = 0;
+    for (var i = 0; i < (username || '').length; i++) { hash = username.charCodeAt(i) + ((hash << 5) - hash); }
+    var c = colors[Math.abs(hash) % colors.length];
+    var svg = '%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect fill=\'%23' + c + '\' width=\'100\' height=\'100\'/%3E%3Ccircle fill=\'%23d4d9b0\' cx=\'50\' cy=\'35\' r=\'22\'/%3E%3Ctext x=\'50\' y=\'42\' text-anchor=\'middle\' font-size=\'16\' fill=\'%233d4030\' font-weight=\'bold\'%3E' + encodeURIComponent(letter) + '%3C/text%3E%3C/svg%3E';
+    return 'data:image/svg+xml,' + svg;
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr);
+    var now = new Date();
+    var diff = now - d;
+    var mins = Math.floor(diff / 60000);
+    var hours = Math.floor(diff / 3600000);
+    var days = Math.floor(diff / 86400000);
+    if (mins < 1) return 'только что';
+    if (mins < 60) return mins + ' мин назад';
+    if (hours < 24) return hours + ' ч назад';
+    if (days < 7) return days + ' дн назад';
+    return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function parseTags(tagsStr) {
+    if (!tagsStr) return [];
+    return tagsStr.split(',').map(function (t) { return t.trim(); }).filter(function (t) { return t; });
+  }
+
+  function getTagClass(tag) {
+    var upper = tag.toUpperCase();
+    if (upper === 'ЗАКРЕП') return 'tag-gold';
+    if (upper === 'ГАЙД' || upper.indexOf('ГАЙД') !== -1) return 'tag-steel';
+    if (upper === 'РЕПЛЕЙ') return 'tag-gold';
+    if (upper === 'ХОТОВО' || upper.indexOf('НЫТЬЁ') !== -1) return 'tag-fire';
+    return '';
+  }
+
+  function renderTopicCard(t) {
+    var tags = parseTags(t.tags);
+    var tagHtml = tags.map(function (tag) {
+      var cls = getTagClass(tag);
+      return '<span class="tag' + (cls ? ' ' + cls : '') + '">' + tag + '</span>';
+    }).join('');
+    var avatarUrl = t.avatar || buildAvatarHtml(t.username);
+    var lastActivity = t.updatedAt ? '• Последний: <strong>' + t.username + '</strong> ' + formatDate(t.updatedAt) : '';
+    var isVent = (t.categoryName && t.categoryName.indexOf('нытья') !== -1);
+    var style = isVent ? 'style="border-left-color:var(--fire-400)"' : '';
+    var topicLink = isVent ? 'topic.html?id=' + t.id + '&type=vent' : 'topic.html?id=' + t.id;
+    var titleStyle = isVent ? 'style="color:var(--fire-500)"' : '';
+    return '<div class="topic-card"' + style + '>' +
+      '<div class="avatar-wrap"><img class="avatar avatar-sm" src="' + avatarUrl + '" alt="' + escapeHtml(t.username) + '"><span class="online-dot"></span></div>' +
+      '<div class="topic-main">' +
+      '<div class="topic-title"><a href="' + topicLink + '" ' + titleStyle + '>' + escapeHtml(t.title) + '</a>' + tagHtml + '</div>' +
+      '<div class="topic-meta"><a href="profile.html?user=' + encodeURIComponent(t.username) + '" style="color:inherit;text-decoration:none">' + escapeHtml(t.username) + '</a> <span>•</span> <span>' + formatDate(t.createdAt) + '</span> ' + lastActivity + '</div>' +
+      '</div>' +
+      '<div class="topic-stats"><span>💬 <strong>' + t.postCount + '</strong></span></div>' +
+      '</div>';
+  }
+
+  function renderCategorySection(catName, catDesc, topics, catId) {
+    var isVent = catName.indexOf('нытья') !== -1 || catName.indexOf('Поддержка') !== -1;
+    var sectionClass = isVent ? 'vent-section' : '';
+    var h = '<section class="category-section" data-category="' + (isVent ? 'vent' : 'general') + '" data-category-id="' + catId + '">';
+    if (isVent) h += '<div class="' + sectionClass + '">';
+    h += '<div class="category-header"><h2>' + catName + ' <span class="subtitle">' + (catDesc || '') + '</span></h2></div>';
+    if (topics.length === 0) {
+      h += '<div class="text-sm text-tertiary" style="padding:1rem;text-align:center">Тем пока нет</div>';
+    } else {
+      for (var i = 0; i < topics.length; i++) {
+        h += renderTopicCard(topics[i]);
+      }
+    }
+    if (isVent) h += '</div>';
+    h += '</section>';
+    return h;
+  }
+
+  function renderPagination(totalCount, page, pageSize) {
+    var totalPages = Math.ceil(totalCount / pageSize);
+    if (totalPages <= 1) return '';
+    var h = '';
+    h += '<button class="page-btn' + (page <= 1 ? ' disabled' : '') + '" data-page="' + (page - 1) + '" onclick="goToPage(' + (page - 1) + ')">←</button>';
+    for (var p = 1; p <= totalPages; p++) {
+      if (totalPages > 7 && p > 2 && p < totalPages - 1 && Math.abs(p - page) > 2) {
+        if (p === 3 || p === totalPages - 2) h += '<button class="page-btn disabled">⋯</button>';
+        continue;
+      }
+      h += '<button class="page-btn' + (p === page ? ' active' : '') + '" onclick="goToPage(' + p + ')">' + p + '</button>';
+    }
+    h += '<button class="page-btn' + (page >= totalPages ? ' disabled' : '') + '" data-page="' + (page + 1) + '" onclick="goToPage(' + (page + 1) + ')">→</button>';
+    return h;
+  }
+
+  function goToPage(page) {
+    currentPage = page;
+    loadTopics();
+  }
+
+  async function loadTopics() {
+    var container = document.getElementById('topicsContainer');
+    container.innerHTML = '<div class="loading" style="text-align:center;padding:2rem;color:var(--text-tertiary)">Загрузка тем...</div>';
+    try {
+      var params = '?page=' + currentPage + '&pageSize=20';
+      if (currentSearch) params += '&search=' + encodeURIComponent(currentSearch);
+
+      var data = await api.get('/api/topics' + params);
+      var topics = data.items || [];
+      var totalCount = data.totalCount || 0;
+
+      // Group topics by category
+      var grouped = {};
+      for (var i = 0; i < topics.length; i++) {
+        var t = topics[i];
+        var catName = t.categoryName || 'Общее';
+        if (!grouped[catName]) grouped[catName] = { catId: t.categoryId, desc: '', topics: [] };
+        grouped[catName].topics.push(t);
+      }
+
+      // Get categories for descriptions
+      var catKeys = Object.keys(grouped);
+      if (catKeys.length === 0) {
+        container.innerHTML = '<div class="text-sm text-tertiary" style="padding:2rem;text-align:center">Тем пока нет. Создай первую!</div>';
+      } else {
+        var h = '';
+        for (var cn in grouped) {
+          var g = grouped[cn];
+          var catDesc = categoriesMap[g.catId] || '';
+          if (currentFilter === 'vent' && cn.indexOf('нытья') === -1 && cn.indexOf('Поддержка') === -1) continue;
+          if (currentFilter === 'all' || (currentFilter === 'vent' && (cn.indexOf('нытья') !== -1 || cn.indexOf('Поддержка') !== -1))) {
+            h += renderCategorySection(cn, catDesc, g.topics, g.catId);
+          }
+        }
+        container.innerHTML = h || '<div class="text-sm text-tertiary" style="padding:2rem;text-align:center">Нет тем в этой категории</div>';
+      }
+
+      document.getElementById('pagination').innerHTML = renderPagination(totalCount, currentPage, 20);
+    } catch (e) {
+      container.innerHTML = '<div class="text-sm" style="padding:2rem;text-align:center;color:var(--fire-500)">Ошибка загрузки тем. Попробуй позже.</div>';
+    }
+  }
+
+  async function loadCategories() {
+    try {
+      var cats = await api.get('/api/categories');
+      for (var i = 0; i < cats.length; i++) {
+        categoriesMap[cats[i].id] = cats[i].description || '';
+      }
+    } catch (_) {}
+  }
+
+  async function loadClans() {
+    try {
+      var clans = await api.get('/api/clans');
+      var list = document.getElementById('clansList');
+      if (!list) return;
+      if (!clans || clans.length === 0) {
+        list.innerHTML = '<div class="text-sm text-tertiary" style="padding:0.5rem">Кланов пока нет</div>';
+        return;
+      }
+      var emojis = ['🔵','🎯','💥','🛡','⚔️','🏰'];
+      list.innerHTML = clans.map(function (c, idx) {
+        var actionBtn = c.isMember
+          ? '<button class="pa-btn" style="font-size:0.65rem;color:var(--fire-500)" onclick="leaveClan(' + c.id + ',\'' + c.name.replace(/'/g, "\\'") + '\')" title="Покинуть">🚪</button>'
+          : '<button class="pa-btn" style="font-size:0.65rem" onclick="joinClan(' + c.id + ',\'' + c.name.replace(/'/g, "\\'") + '\')" title="Вступить">➕</button>';
+        var memberBadge = c.isMember ? ' <span class="text-xs" style="color:var(--olive-500)">✓</span>' : '';
+        return '<div class="clan-card">' +
+          '<div class="clan-emblem">' + (emojis[idx % emojis.length]) + '</div>' +
+          '<div class="clan-info"><div class="clan-name">' + escapeHtml(c.name) + memberBadge + '</div>' +
+          '<div class="clan-desc">' + escapeHtml(c.description || '') + '</div></div>' +
+          '<span class="text-xs text-tertiary" style="white-space:nowrap">👥 ' + c.memberCount + '</span>' +
+          '<div class="flex" style="gap:2px;margin-left:4px">' + actionBtn + '</div></div>';
+      }).join('');
+    } catch (_) {
+      var list = document.getElementById('clansList');
+      if (list) list.innerHTML = '<div class="text-sm text-tertiary" style="padding:0.5rem">Не удалось загрузить кланы</div>';
+    }
+  }
+
+  function showCreateClan() {
+    document.getElementById('clanName').value = '';
+    document.getElementById('clanDesc').value = '';
+    modal.open('createClanModal');
+  }
+
+  async function createClan(form) {
+    var name = document.getElementById('clanName').value.trim();
+    var desc = document.getElementById('clanDesc').value.trim();
+    if (!name) { toast.warning('Введи название клуба'); return; }
+    try {
+      await api.post('/api/clans/create', { name: name, description: desc });
+      toast.success('Клуб "' + name + '" создан!');
+      modal.close('createClanModal');
+      loadClans();
+    } catch (_) {}
+  }
+
+  async function joinClan(clanId, clanName) {
+    try {
+      await api.post('/api/clans/join', { clanId: clanId });
+      toast.success('Вступил в "' + clanName + '"');
+      loadClans();
+    } catch (_) {}
+  }
+
+  async function leaveClan(clanId, clanName) {
+    try {
+      await api.post('/api/clans/leave', { clanId: clanId });
+      toast.info('Покинул "' + clanName + '"');
+      loadClans();
+    } catch (_) {}
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Redirect if not logged in
+    if (!api.isLoggedIn()) { window.location.href = 'index.html'; return; }
+
+    // Tabs
+    var tabs = document.querySelectorAll('#filterTabs .tab');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) { t.classList.remove('active'); t.style.color = ''; t.style.borderBottomColor = ''; });
+        this.classList.add('active');
+        this.style.color = 'var(--text-primary)';
+        this.style.borderBottomColor = 'var(--fire-500)';
+        currentFilter = this.getAttribute('data-filter');
+        currentPage = 1;
+        loadTopics();
+      });
+    });
+
+    // Search
+    var searchInput = document.getElementById('headerSearch');
+    if (searchInput) {
+      var urlParams = new URLSearchParams(window.location.search);
+      var urlQ = urlParams.get('q');
+      if (urlQ) {
+        searchInput.value = urlQ;
+        currentSearch = urlQ;
+      }
+
+      searchInput.addEventListener('input', function () {
+        currentSearch = this.value;
+        currentPage = 1;
+        loadTopics();
+      });
+    }
+
+    // Load data
+    loadCategories().then(function () { loadTopics(); });
+    loadClans();
+    loadOnlineUsers();
+
+    // Heartbeat
+    api.post('/api/users/heartbeat');
+    setInterval(function () { api.post('/api/users/heartbeat'); }, 120000);
+  });
+
+  function renderOnlineUser(u) {
+    var rankHtml = u.rank ? '<span class="rank-badge" style="font-size:0.55rem;color:var(--' + (u.rankClass || 'rank-corporal') + ');border-color:var(--' + (u.rankClass || 'rank-corporal') + ')">' + escapeHtml(u.rank) + '</span>' : '';
+    var avatarLetter = (u.username || '?').charAt(0).toUpperCase();
+    return '<div class="online-item">'
+      + '<span class="status-dot-sm online"></span>'
+      + '<a href="profile.html?user=' + encodeURIComponent(u.username) + '" class="name" style="color:var(--text-primary);text-decoration:none">' + escapeHtml(u.username) + '</a>'
+      + rankHtml
+      + '</div>';
+  }
+
+  async function loadOnlineUsers() {
+    try {
+      var users = await api.get('/api/users/online');
+      var sidebar = document.getElementById('onlineListSidebar');
+      var countEl = document.getElementById('onlineCountHeader');
+      if (!sidebar) return;
+
+      if (!users || users.length === 0) {
+        sidebar.innerHTML = '<div class="text-xs text-tertiary" style="padding:0.5rem">Нет бойцов онлайн</div>';
+        if (countEl) countEl.textContent = '(0)';
+        return;
+      }
+
+      if (countEl) countEl.textContent = '(' + users.length + ')';
+      sidebar.innerHTML = users.slice(0, 5).map(renderOnlineUser).join('');
+    } catch (_) {}
+  }
+
+  async function loadOnlineModal() {
+    try {
+      var users = await api.get('/api/users/online');
+      var list = document.getElementById('onlineList');
+      var countEl = document.getElementById('onlineModalCount');
+      if (!list) return;
+
+      if (!users || users.length === 0) {
+        list.innerHTML = '<div class="text-sm text-tertiary" style="padding:1rem;text-align:center">Нет бойцов онлайн</div>';
+        if (countEl) countEl.textContent = '(0)';
+      } else {
+        if (countEl) countEl.textContent = '(' + users.length + ')';
+        list.innerHTML = users.map(renderOnlineUser).join('');
+      }
+
+      document.getElementById('onlineSearch').value = '';
+      modal.open('onlineModal');
+    } catch (_) {
+      toast.error('Не удалось загрузить список онлайн');
+    }
+  }
+
+  function filterOnline(query) {
+    var items = document.querySelectorAll('#onlineList .online-item');
+    query = query.toLowerCase().trim();
+    items.forEach(function (item) {
+      var name = item.querySelector('.name').textContent.toLowerCase();
+      item.style.display = !query || name.indexOf(query) !== -1 ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>

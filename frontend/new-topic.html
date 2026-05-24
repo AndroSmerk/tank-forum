@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Броня Крепка — Новая тема</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div id="headerPlaceholder"></div>
+
+<div class="page-layout">
+  <main class="main-content" style="max-width:800px;margin:0 auto">
+
+    <div class="breadcrumbs">
+      <a href="feed.html">Форум</a> <span>/</span>
+      <span>Новая тема</span>
+    </div>
+
+    <h1 style="font-size:1.3rem;font-weight:800;margin-bottom:1rem">➕ Создать новую тему</h1>
+
+    <form class="sidebar-widget" style="padding:1.5rem" id="newTopicForm" data-draft="new-topic">
+
+      <div class="form-group">
+        <label for="topicTitle">Заголовок темы</label>
+        <input class="input" type="text" id="topicTitle" placeholder="Например: Разбор реплея на E 50 M" data-draft-field="title">
+      </div>
+
+      <div class="form-group">
+        <label for="topicCategory">Категория</label>
+        <select class="input" id="topicCategory" data-draft-field="category">
+          <option value="">— Выбери категорию —</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="topicSection">Раздел</label>
+        <select class="input" id="topicSection" data-draft-field="section">
+          <option value="">— Сначала выбери категорию —</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="topicTags">Теги (через запятую, опционально)</label>
+        <input class="input" type="text" id="topicTags" placeholder="#E50M #Референс #Гайд" data-draft-field="tags">
+      </div>
+
+      <div class="form-group">
+        <label for="topicBody">Содержание</label>
+        <textarea class="input" id="topicBody" rows="8" placeholder="Опиши свою мысль, приложи реплей или скриншоты..." style="resize:vertical" data-draft-field="body"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Вложения</label>
+        <div style="border:2px dashed var(--border-color);border-radius:var(--radius-md);padding:2rem;text-align:center;cursor:pointer;transition:0.2s" onclick="toast.show('Загрузка файлов будет доступна позже')">
+          <p style="font-size:2rem;margin-bottom:0.5rem">📎</p>
+          <p class="text-sm text-tertiary">Перетащи файлы сюда или нажми для выбора</p>
+          <p class="text-xs text-tertiary">Изображения до 10 МБ · Реплеи (.wotreplay) до 15 МБ</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-checkbox">
+          <input type="checkbox" id="topicIsVent"> Отправить в «Склад нытья» (анонимно)
+        </label>
+      </div>
+
+      <div class="flex gap-2" style="margin-top:1.5rem;flex-wrap:wrap">
+        <button type="submit" class="btn btn-fire" style="padding:0.7rem 2rem;font-size:1rem">⬡ Опубликовать тему</button>
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('newTopicForm').requestSubmit()">💾 Сохранить черновик</button>
+        <button type="button" class="btn btn-ghost" onclick="window.location.href='feed.html'" style="margin-left:auto">Отмена</button>
+      </div>
+
+      <div class="auto-save-indicator" data-draft-indicator style="margin-top:0.75rem">💾 Черновик сохраняется автоматически</div>
+    </form>
+
+  </main>
+</div>
+
+<div id="footerPlaceholder"></div>
+<div id="chatPlaceholder"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/components.js"></script>
+<script src="js/chat.js?v=2"></script>
+<script src="js/drafts.js"></script>
+<script>
+  var categoriesCache = [];
+  var sectionsCache = [];
+
+  async function loadCategories() {
+    try {
+      var cats = await api.get('/api/categories');
+      categoriesCache = cats || [];
+      var sel = document.getElementById('topicCategory');
+      sel.innerHTML = '<option value="">— Выбери категорию —</option>';
+      cats.forEach(function (c) {
+        sel.innerHTML += '<option value="' + c.id + '">' + escapeHtml(c.name) + '</option>';
+      });
+    } catch (_) {
+      toast.error('Не удалось загрузить категории');
+    }
+  }
+
+  async function loadSections() {
+    try {
+      var secs = await api.get('/api/sections');
+      sectionsCache = secs || [];
+    } catch (_) {}
+  }
+
+  function filterSections(categoryId) {
+    var sel = document.getElementById('topicSection');
+    sel.innerHTML = '<option value="">— Выбери раздел —</option>';
+    var filtered = sectionsCache.filter(function (s) { return s.categoryId === categoryId; });
+    if (filtered.length === 0) {
+      sel.innerHTML += '<option value="" disabled>Нет разделов в этой категории</option>';
+      return;
+    }
+    filtered.forEach(function (s) {
+      sel.innerHTML += '<option value="' + s.id + '">' + escapeHtml(s.name) + '</option>';
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!api.isLoggedIn()) { window.location.href = 'index.html'; return; }
+
+    loadCategories();
+    loadSections();
+
+    document.getElementById('topicCategory').addEventListener('change', function () {
+      var catId = parseInt(this.value);
+      if (catId) filterSections(catId);
+    });
+
+    document.getElementById('topicIsVent').addEventListener('change', function () {
+      // Find vent category
+      for (var i = 0; i < categoriesCache.length; i++) {
+        if (categoriesCache[i].name.indexOf('нытья') !== -1 || categoriesCache[i].name.indexOf('Поддержка') !== -1) {
+          if (this.checked) {
+            document.getElementById('topicCategory').value = categoriesCache[i].id;
+            document.getElementById('topicCategory').dispatchEvent(new Event('change'));
+          }
+          break;
+        }
+      }
+    });
+
+    document.getElementById('newTopicForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var title = document.getElementById('topicTitle').value.trim();
+      var sectionId = parseInt(document.getElementById('topicSection').value);
+      var content = document.getElementById('topicBody').value.trim();
+      var tags = document.getElementById('topicTags').value.trim();
+
+      if (!title) { toast.warning('Введи заголовок темы'); return; }
+      if (!sectionId) { toast.warning('Выбери раздел'); return; }
+      if (!content) { toast.warning('Напиши содержание'); return; }
+
+      var body = { sectionId: sectionId, title: title, content: content };
+      if (tags) body.tags = tags;
+
+      try {
+        var topic = await api.post('/api/topics', body);
+        toast.success('Тема создана!');
+        // Clear draft
+        localStorage.removeItem('tank-draft-new-topic');
+        setTimeout(function () {
+          window.location.href = 'topic.html?id=' + topic.id;
+        }, 300);
+      } catch (_) {}
+    });
+  });
+</script>
+</body>
+</html>
