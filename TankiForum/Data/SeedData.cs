@@ -7,6 +7,7 @@ public static class SeedData
 {
     public static async Task Initialize(AppDbContext ctx)
     {
+        await ctx.Database.EnsureCreatedAsync();
         if (await ctx.Users.AnyAsync()) return;
 
         // ===== Users =====
